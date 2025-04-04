@@ -1,5 +1,5 @@
 import axios from "axios";
-import { BASE_URL, BASE_HEADERS } from "../constants/app-constants";
+import { BASE_URL } from "../constants/app-constants";
 
 // ROOMS URL
 const BASE_ROOMS = `${BASE_URL}/portal/rooms`;

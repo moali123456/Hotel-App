@@ -7,8 +7,9 @@ import {
   Typography,
   Button,
 } from "@material-tailwind/react";
+import { Link } from "react-router-dom";
 
-const Booking = ({ buttonText, price, discount, payment, btnClass }) => {
+const Booking = ({ buttonText, price, discount, payment, btnClass, btnLink }) => {
   const { t } = useTranslation();
   const [numberValue, setNumberValue] = useState(0);
   const [numPersons, setNumPersons] = useState(1);
@@ -126,7 +127,7 @@ const Booking = ({ buttonText, price, discount, payment, btnClass }) => {
             variant="filled"
             className="mt-7 bg-[#3252DF] cursor-pointer capitalize font-normal text-base py-2 px-10"
           >
-            {buttonText}
+            <Link to={btnLink}>{buttonText}</Link>
           </Button>
         </div>
       </div>

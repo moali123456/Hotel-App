@@ -29,7 +29,7 @@ const BannerSection = () => {
               <div className="text-[#152C5B] text-lg font-semibold mt-8">
                 <h3>{t("home_page.start_booking")}</h3>
 
-                <Booking buttonText={t("home_page.explore")} payment={false} />
+                <Booking btnLink="/explore-rooms" buttonText={t("home_page.explore")} payment={false} />
               </div>
             </div>
           </div>

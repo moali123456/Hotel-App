@@ -15,11 +15,13 @@ import "yet-another-react-lightbox/plugins/counter.css";
 // datepicker
 import Booking from "../home-page/banner-section/booking";
 //
+import axios from "axios";
+import { ADS_ROOMS, BASE_HEADERS } from "../../../../constants/END_POINTS";
 import SkeletonOne from "../../shared/skeleton/skeleton-one";
 import { getRoomDetails } from "../../../../networking/rooms.services";
-import "./room-details.scss";
+import "./ad-details.scss";
 
-const RoomDetails = () => {
+const AdDetails = () => {
   const { t } = useTranslation();
   const { id } = useParams();
   // gallery
@@ -33,22 +35,40 @@ const RoomDetails = () => {
   // Array of image sources
   //const imageList = [Images.room_pic_1, Images.room_pic_2, Images.room_pic_3];
 
-  async function getRoom(id) {
-    //if (!id) return;
+  // get all rooms
+  const getRoom = async () => {
     try {
       setLoading(true);
-      const response = await getRoomDetails(id);
-      setImagesList(response?.data?.data?.room?.images || []);
-      setFacilitiesList(response?.data?.data?.room?.facilities);
-      setRoom(response?.data?.data?.room);
-
-      //setRoomsList(response.data?.data?.rooms || []);
+      const response = await axios.get(
+        ADS_ROOMS.getRoomDetails(`${id}`),
+        BASE_HEADERS
+      );
+      setImagesList(response?.data?.data?.ads?.room?.images || []);
+      setFacilitiesList(response?.data?.data?.ads?.room?.facilities);
+      setRoom(response?.data?.data?.ads?.room);
     } catch (error) {
       console.error("Error fetching room:", error);
     } finally {
       setLoading(false);
     }
-  }
+  };
+
+  // async function getRoom(id) {
+  //   //if (!id) return;
+  //   try {
+  //     setLoading(true);
+  //     const response = await getRoomDetails(id);
+  //     setImagesList(response?.data?.data?.ads?.room?.images || []);
+  //     setFacilitiesList(response?.data?.data?.ads?.room?.facilities);
+  //     setRoom(response?.data?.data?.ads?.room);
+
+  //     //setRoomsList(response.data?.data?.rooms || []);
+  //   } catch (error) {
+  //     console.error("Error fetching room:", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }
 
   useEffect(() => {
     getRoom(id);
@@ -61,7 +81,7 @@ const RoomDetails = () => {
         <PageTitle
           roomName={t("room_name")}
           roomLocation={t("room_location")}
-          roomLink="/room-details"
+          roomLink={`/ad-details/${id}`}
           linkText={t("room_details")}
         />
 
@@ -333,12 +353,12 @@ const RoomDetails = () => {
           <div className="grid grid-cols-12 gap-8">
             {/* rate form */}
             <div className="col-span-12 md:col-span-6 lg:col-span-6 border-e-0 border-[#E5E5E5] md:border-e lg:border-e border-b md:border-b-0 lg:border-b-0">
-              <RateForm roomId={id} />
+              <RateForm roomId={room?._id} />
             </div>
 
             {/* comment form */}
             <div className="col-span-12 md:col-span-6 lg:col-span-6">
-              <CommentForm roomId={id} />
+              <CommentForm roomId={room?._id} />
             </div>
           </div>
         </div>
@@ -346,7 +366,7 @@ const RoomDetails = () => {
 
         {/* About tabs */}
         <div className="mb-10">
-          <AboutTabs roomId={id} />
+          <AboutTabs roomId={room?._id} />
         </div>
         {/*  */}
       </div>
@@ -354,4 +374,4 @@ const RoomDetails = () => {
   );
 };
 
-export default RoomDetails;
+export default AdDetails;

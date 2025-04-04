@@ -16,7 +16,7 @@ export const ROOMS_URLS = {
   addRoom: `${BASE_ROOMS}`,
 };
 
-// ROOMS URL
+// FAVOURITES URL
 const BASE_FAVOURITES = `${BASE_URL}/portal/favorite-rooms`;
 
 export const ROOMS_FAVOURITES = {
@@ -31,6 +31,14 @@ const BASE_REVIEWS = `${BASE_URL}/portal/room-reviews`;
 export const ROOM_REVIEWS = {
   getAllReviews: (id) => `${BASE_REVIEWS}/${id}`,
   addReview: `${BASE_REVIEWS}`,
+};
+
+// ADS URL
+const BASE_ADS = `${BASE_URL}/portal/ads`;
+
+export const ADS_ROOMS = {
+  getAllAds: `${BASE_ADS}`,
+  getRoomDetails: (id) => `${BASE_ADS}/${id}`,
 };
 
 // ROOM COMMENTS

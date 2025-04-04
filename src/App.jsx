@@ -22,6 +22,7 @@ import AuthNotFound from "./modules/auth/components/auth-not-found/auth-not-foun
 // Landing Pages
 import HomePage from "./modules/landing-page/components/home-page/home-page";
 import RoomDetails from "./modules/landing-page/components/room-details/room-details";
+import AdDetails from "./modules/landing-page/components/ad-details/ad-details";
 import ExplorePage from "./modules/landing-page/components/explore-page/explore-page";
 import FavoritesPage from "./modules/landing-page/components/favorites-page/favorites-page";
 import LandingNotFound from "./modules/landing-page/components/landing-not-found/landing-not-found";
@@ -61,6 +62,7 @@ const App = () => {
         { index: true, element: <HomePage /> },
         { path: "home", element: <HomePage /> },
         { path: "room-details/:id", element: <RoomDetails /> },
+        { path: "ad-details/:id", element: <AdDetails /> },
         { path: "explore-rooms", element: <ExplorePage /> },
         { path: "favorites", element: <FavoritesPage /> },
         { path: "*", element: <LandingNotFound /> },

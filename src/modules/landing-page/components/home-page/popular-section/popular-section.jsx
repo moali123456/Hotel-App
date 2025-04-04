@@ -32,6 +32,7 @@ const PopularSection = () => {
   //   }
   // };
 
+  // get all rooms
   async function getRoomsList(page) {
     try {
       setLoading(true);
@@ -75,8 +76,8 @@ const PopularSection = () => {
         ) : (
           <>
             <div className="grid grid-flow-col grid-rows-4 gap-4">
-              {roomsList.length > 0
-                ? roomsList.map((room, index) => (
+              {roomsList?.length > 0
+                ? roomsList?.map((room, index) => (
                     <div
                       key={index}
                       className={`${
