@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Images from "../../../../assets/Images/Images";
 import PageTitle from "../../shared/page-title/page-title";
 import RateForm from "./rate-form";
@@ -15,16 +15,12 @@ import "yet-another-react-lightbox/plugins/counter.css";
 // datepicker
 import Booking from "../../shared/booking/booking";
 //
-import axios from "axios";
-import { ROOMS_URLS, ROOM_BOOKING, BASE_HEADERS } from "../../../../constants/END_POINTS";
 import SkeletonOne from "../../shared/skeleton/skeleton-one";
-import { toast } from "react-toastify";
-//import { getRoomDetails } from "../../../../networking/rooms.services";
+import { getRoomDetails } from "../../../../networking/rooms.services";
 import "./room-details.scss";
 
 const RoomDetails = () => {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const { id } = useParams();
   // gallery
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
@@ -33,78 +29,53 @@ const RoomDetails = () => {
   const [imagesList, setImagesList] = useState([]);
   const [room, setRoom] = useState();
   const [facilitiesList, setFacilitiesList] = useState();
-  const [bookingData, setBookingData] = useState(null);
 
   // Array of image sources
   //const imageList = [Images.room_pic_1, Images.room_pic_2, Images.room_pic_3];
 
-  // get room details
-  const getRoom = async () => {
+  async function getRoom(id) {
+    //if (!id) return;
     try {
       setLoading(true);
-      const response = await axios.get(
-        ROOMS_URLS.getRoomDetails(`${id}`),
-        BASE_HEADERS
-      );
+      const response = await getRoomDetails(id);
       setImagesList(response?.data?.data?.room?.images || []);
       setFacilitiesList(response?.data?.data?.room?.facilities);
       setRoom(response?.data?.data?.room);
+
+      //setRoomsList(response.data?.data?.rooms || []);
     } catch (error) {
       console.error("Error fetching room:", error);
     } finally {
       setLoading(false);
     }
-  };
-  // async function getRoom(id) {
-  //   //if (!id) return;
-  //   try {
-  //     setLoading(true);
-  //     const response = await getRoomDetails(id);
-  //     setImagesList(response?.data?.data?.room?.images || []);
-  //     setFacilitiesList(response?.data?.data?.room?.facilities);
-  //     setRoom(response?.data?.data?.room);
+  }
 
-  //     //setRoomsList(response.data?.data?.rooms || []);
-  //   } catch (error) {
-  //     console.error("Error fetching room:", error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // }
+  // booking
+  const handelBookSubmit = async () => {
+    setFormSubmitted(true); // Mark form as submitted
 
-  // This function will handle the form submission from the Booking component
-  // const handleBookingData = (data) => {
-  //   console.log("Booking data received in details:", data);
-  //   setBookingData(data);  // Save the booking data in the parent state
-  //   navigate("/payment");
-  // };
-
-  const handleBookingData = async (data) => { 
-    setBookingData(data);  // Save the booking data in the parent state
-    try {
-      // Send new comment to API
-      const response = await axios.post(
-        ROOM_BOOKING.addBooking,
-        { startDate: data.startDate,
-          endDate: data.endDate,
-          room: data.roomId,
-          totalPrice: data.totalPrice,
-         },
-        BASE_HEADERS
-      );
-  
-      toast.success(t("booking added successfuly"), { position: "top-center" });
-      console.log(response);
-      navigate("/payment");
-  
-    } catch (error) {
-      console.error("Error submitting review:", error.response?.data || error);
-      toast.error(error.response?.data?.message || t("error_msg"), { position: "top-center" });
+    if (!value.startDate || !value.endDate || numberValue <= 0) {
+      return; // Stop submission if validation fails
     }
+
+    // Format dates to "YYYY-MM-DD"
+    const formattedStartDate = new Date(value.startDate).toISOString().split("T")[0];
+    const formattedEndDate = new Date(value.endDate).toISOString().split("T")[0];
+
+    const bookingData = {
+      startDate: formattedStartDate,
+      endDate: formattedEndDate,
+      roomId,
+      totalPrice: totalDiscountPrice,
+    };
+
+    // navigate(btnLink || "/explore-rooms");
+    navigate(btnLink);
+    console.log(bookingData);
   };
 
   useEffect(() => {
-    getRoom();
+    getRoom(id);
   }, [id]);
 
   return (
@@ -374,8 +345,8 @@ const RoomDetails = () => {
                     payment={true}
                     btnClass="text-center"
                     roomId={id}
-                    //btnLink="/explore-rooms"
-                    onBookingSubmit={handleBookingData}
+                    btnLink="/explore-rooms"
+                    handelBookSubmit={handelBookSubmit}
                   />
                 </div>
               </div>

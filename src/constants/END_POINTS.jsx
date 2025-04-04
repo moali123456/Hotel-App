@@ -41,6 +41,15 @@ export const ADS_ROOMS = {
   getRoomDetails: (id) => `${BASE_ADS}/${id}`,
 };
 
+// BOOKING URL
+const BASE_BOOKING = `${BASE_URL}/portal/booking`;
+
+export const ROOM_BOOKING = {
+  addBooking: `${BASE_BOOKING}`,
+  getAllBooking: `${BASE_BOOKING}/my`,
+  getBookDetails: (id) => `${BASE_BOOKING}/${id}`,
+};
+
 // ROOM COMMENTS
 const BASE_COMMENTS = `${BASE_URL}/portal/room-comments`;
 

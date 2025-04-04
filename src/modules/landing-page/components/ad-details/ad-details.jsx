@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Images from "../../../../assets/Images/Images";
 import PageTitle from "../../shared/page-title/page-title";
 import RateForm from "./rate-form";
@@ -13,16 +13,17 @@ import Zoom from "yet-another-react-lightbox/plugins/zoom";
 import "yet-another-react-lightbox/styles.css";
 import "yet-another-react-lightbox/plugins/counter.css";
 // datepicker
-import Booking from "../home-page/banner-section/booking";
+import Booking from "../../shared/booking/booking";
 //
 import axios from "axios";
-import { ADS_ROOMS, BASE_HEADERS } from "../../../../constants/END_POINTS";
+import { ADS_ROOMS, ROOM_BOOKING, BASE_HEADERS } from "../../../../constants/END_POINTS";
+import { toast } from "react-toastify";
 import SkeletonOne from "../../shared/skeleton/skeleton-one";
-import { getRoomDetails } from "../../../../networking/rooms.services";
 import "./ad-details.scss";
 
 const AdDetails = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { id } = useParams();
   // gallery
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
@@ -31,11 +32,12 @@ const AdDetails = () => {
   const [imagesList, setImagesList] = useState([]);
   const [room, setRoom] = useState();
   const [facilitiesList, setFacilitiesList] = useState();
+  const [bookingData, setBookingData] = useState(null);
 
   // Array of image sources
   //const imageList = [Images.room_pic_1, Images.room_pic_2, Images.room_pic_3];
 
-  // get all rooms
+  // get room details
   const getRoom = async () => {
     try {
       setLoading(true);
@@ -70,8 +72,38 @@ const AdDetails = () => {
   //   }
   // }
 
+  // This function will handle the form submission from the Booking component
+  // const handleBookingData = (data) => {
+  //   console.log("Booking data received in details:", data);
+  //   setBookingData(data); // Save the booking data in the parent state
+  //   navigate("/payment");
+  // };
+  const handleBookingData = async (data) => { 
+    setBookingData(data);  // Save the booking data in the parent state
+    try {
+      // Send new comment to API
+      const response = await axios.post(
+        ROOM_BOOKING.addBooking,
+        { startDate: data.startDate,
+          endDate: data.endDate,
+          room: data.roomId,
+          totalPrice: data.totalPrice,
+         },
+        BASE_HEADERS
+      );
+  
+      toast.success(t("booking added successfuly"), { position: "top-center" });
+      console.log(response);
+      navigate("/payment");
+  
+    } catch (error) {
+      console.error("Error submitting review:", error.response?.data || error);
+      toast.error(error.response?.data?.message || t("error_msg"), { position: "top-center" });
+    }
+  };
+
   useEffect(() => {
-    getRoom(id);
+    getRoom();
   }, [id]);
 
   return (
@@ -340,6 +372,9 @@ const AdDetails = () => {
                     discount={room?.discount}
                     payment={true}
                     btnClass="text-center"
+                    roomId={id}
+                    //btnLink="/explore-rooms"
+                    onBookingSubmit={handleBookingData}
                   />
                 </div>
               </div>
