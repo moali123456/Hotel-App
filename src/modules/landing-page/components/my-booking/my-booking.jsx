@@ -20,6 +20,7 @@ import SkeletonOne from "../../shared/skeleton/skeleton-one";
 import Images from "../../../../assets/Images/Images";
 import BookingDetailsModal from "./book-modal";
 import "./my-booking.scss";
+import { Link } from "react-router-dom";
 
 const MyBooking = () => {
   const { t } = useTranslation();
@@ -142,10 +143,10 @@ const MyBooking = () => {
                         </CardBody>
 
                         <CardFooter className="p-0 border-t border-[#ebe6e7] flex w-full">
-                          <div className="flex-1 flex gap-1.5 text-center justify-center items-center py-4 px-4 border-e border-[#ebe6e7] cursor-pointer">
+                          <Link to="/payment" className="flex-1 flex gap-1.5 text-center justify-center items-center py-4 px-4 border-e border-[#ebe6e7] cursor-pointer">
                             <PencilIcon className="w-5 text-[#99a1af]" />{" "}
                             {t("checkout")}
-                          </div>
+                          </Link>
                           <div
                             className="flex-1 flex gap-1.5 text-center justify-center items-center py-4 px-4 cursor-pointer"
                             onClick={() => handleModalOpen(item?._id)}
