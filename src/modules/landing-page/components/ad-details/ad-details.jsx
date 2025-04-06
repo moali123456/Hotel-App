@@ -16,7 +16,11 @@ import "yet-another-react-lightbox/plugins/counter.css";
 import Booking from "../../shared/booking/booking";
 //
 import axios from "axios";
-import { ADS_ROOMS, ROOM_BOOKING, BASE_HEADERS } from "../../../../constants/END_POINTS";
+import {
+  ADS_ROOMS,
+  ROOM_BOOKING,
+  BASE_HEADERS,
+} from "../../../../constants/END_POINTS";
 import { toast } from "react-toastify";
 import SkeletonOne from "../../shared/skeleton/skeleton-one";
 import "./ad-details.scss";
@@ -33,9 +37,6 @@ const AdDetails = () => {
   const [room, setRoom] = useState();
   const [facilitiesList, setFacilitiesList] = useState();
   const [bookingData, setBookingData] = useState(null);
-
-  // Array of image sources
-  //const imageList = [Images.room_pic_1, Images.room_pic_2, Images.room_pic_3];
 
   // get room details
   const getRoom = async () => {
@@ -55,50 +56,29 @@ const AdDetails = () => {
     }
   };
 
-  // async function getRoom(id) {
-  //   //if (!id) return;
-  //   try {
-  //     setLoading(true);
-  //     const response = await getRoomDetails(id);
-  //     setImagesList(response?.data?.data?.ads?.room?.images || []);
-  //     setFacilitiesList(response?.data?.data?.ads?.room?.facilities);
-  //     setRoom(response?.data?.data?.ads?.room);
-
-  //     //setRoomsList(response.data?.data?.rooms || []);
-  //   } catch (error) {
-  //     console.error("Error fetching room:", error);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // }
-
-  // This function will handle the form submission from the Booking component
-  // const handleBookingData = (data) => {
-  //   console.log("Booking data received in details:", data);
-  //   setBookingData(data); // Save the booking data in the parent state
-  //   navigate("/payment");
-  // };
-  const handleBookingData = async (data) => { 
-    setBookingData(data);  // Save the booking data in the parent state
+  const handleBookingData = async (data) => {
+    setBookingData(data); // Save the booking data in the parent state
     try {
       // Send new comment to API
       const response = await axios.post(
         ROOM_BOOKING.addBooking,
-        { startDate: data.startDate,
+        {
+          startDate: data.startDate,
           endDate: data.endDate,
           room: data.roomId,
           totalPrice: data.totalPrice,
-         },
+        },
         BASE_HEADERS
       );
-  
+
       toast.success(t("booking added successfuly"), { position: "top-center" });
       console.log(response);
       navigate("/payment");
-  
     } catch (error) {
       console.error("Error submitting review:", error.response?.data || error);
-      toast.error(error.response?.data?.message || t("error_msg"), { position: "top-center" });
+      toast.error(error.response?.data?.message || t("error_msg"), {
+        position: "top-center",
+      });
     }
   };
 
@@ -227,120 +207,6 @@ const AdDetails = () => {
                     </div>
                   ))}
                 </div>
-
-                {/* <div className="grid grid-cols-12 gap-4">
-                  <div className="col-span-6 md:col-span-6 lg:col-span-3">
-                    <div className="flex flex-col gap-1.5">
-                      <img className="w-[38px]" src={Images.bedroom_icon} />
-                      <div className="flex gap-1 items-baseline">
-                        <span className="text-[#152C5B] text-sm font-semibold">
-                          5
-                        </span>
-                        <span className="text-[#919191] text-sm font-light">
-                          bedroom
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="col-span-6 md:col-span-6 lg:col-span-3">
-                    <div className="flex flex-col gap-1.5">
-                      <img className="w-[38px]" src={Images.livingroom_icon} />
-                      <div className="flex gap-1 items-baseline">
-                        <span className="text-[#152C5B] text-sm font-semibold">
-                          1
-                        </span>
-                        <span className="text-[#919191] text-sm font-light">
-                          living room
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="col-span-6 md:col-span-6 lg:col-span-3">
-                    <div className="flex flex-col gap-1.5">
-                      <img className="w-[38px]" src={Images.bathroom_icon} />
-                      <div className="flex gap-1 items-baseline">
-                        <span className="text-[#152C5B] text-sm font-semibold">
-                          3
-                        </span>
-                        <span className="text-[#919191] text-sm font-light">
-                          bathroom
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="col-span-6 md:col-span-6 lg:col-span-3">
-                    <div className="flex flex-col gap-1.5">
-                      <img className="w-[38px]" src={Images.diningroom_icon} />
-                      <div className="flex gap-1 items-baseline">
-                        <span className="text-[#152C5B] text-sm font-semibold">
-                          1
-                        </span>
-                        <span className="text-[#919191] text-sm font-light">
-                          dining room
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="col-span-6 md:col-span-6 lg:col-span-3">
-                    <div className="flex flex-col gap-1.5">
-                      <img className="w-[38px]" src={Images.wifi_icon} />
-                      <div className="flex gap-1 items-baseline">
-                        <span className="text-[#152C5B] text-sm font-semibold">
-                          10
-                        </span>
-                        <span className="text-[#919191] text-sm font-light">
-                          mbp/s
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="col-span-6 md:col-span-6 lg:col-span-3">
-                    <div className="flex flex-col gap-1.5">
-                      <img className="w-[38px]" src={Images.ic_icon} />
-                      <div className="flex gap-1 items-baseline">
-                        <span className="text-[#152C5B] text-sm font-semibold">
-                          7
-                        </span>
-                        <span className="text-[#919191] text-sm font-light">
-                          unit ready
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="col-span-6 md:col-span-6 lg:col-span-3">
-                    <div className="flex flex-col gap-1.5">
-                      <img className="w-[38px]" src={Images.kulkas_icon} />
-                      <div className="flex gap-1 items-baseline">
-                        <span className="text-[#152C5B] text-sm font-semibold">
-                          2
-                        </span>
-                        <span className="text-[#919191] text-sm font-light">
-                          refigrator
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="col-span-6 md:col-span-6 lg:col-span-3">
-                    <div className="flex flex-col gap-1.5">
-                      <img className="w-[38px]" src={Images.tv_icon} />
-                      <div className="flex gap-1 items-baseline">
-                        <span className="text-[#152C5B] text-sm font-semibold">
-                          4
-                        </span>
-                        <span className="text-[#919191] text-sm font-light">
-                          television
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div> */}
               </div>
             </div>
 
@@ -372,7 +238,7 @@ const AdDetails = () => {
                     discount={room?.discount}
                     payment={true}
                     btnClass="text-center"
-                    roomId={id}
+                    roomId={room?._id}
                     //btnLink="/explore-rooms"
                     onBookingSubmit={handleBookingData}
                   />

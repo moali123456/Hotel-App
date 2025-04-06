@@ -29,9 +29,13 @@ const ReviewsTab = ({ roomId }) => {
 
   // get reviews
   const getReviews = async () => {
+    if (!roomId) {
+      console.error("Invalid roomId:", roomId);
+      return;  // Exit the function if roomId is invalid
+    }
     try {
       setLoadingReviews(true);
-      const response = await axios.get(ROOM_REVIEWS?.getAllReviews(roomId), {
+      const response = await axios.get(ROOM_REVIEWS.getAllReviews(roomId), {
         headers: {
           Authorization: `${token}`,
           "Content-Type": "application/json",

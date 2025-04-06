@@ -9,6 +9,7 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 // Protected Routes
 import AuthProtectedRoute from "./modules/shared/protected-route/auth-protected-route";
 import AdminProtectedRoute from "./modules/shared/protected-route/admin-protected-route";
+import LandingProtectedRoute from "./modules/shared/protected-route/landing-protected-route";
 // Layouts
 import LandingPageLayout from "./modules/layouts/components/landing-page-layout/landing-page-layout";
 import AuthLayout from "./modules/layouts/components/auth-layout/auth-layout";
@@ -26,6 +27,7 @@ import AdDetails from "./modules/landing-page/components/ad-details/ad-details";
 import ExplorePage from "./modules/landing-page/components/explore-page/explore-page";
 import FavoritesPage from "./modules/landing-page/components/favorites-page/favorites-page";
 import Payment from "./modules/landing-page/components/payment/payment";
+import MyBooking from "./modules/landing-page/components/my-booking/my-booking";
 import LandingNotFound from "./modules/landing-page/components/landing-not-found/landing-not-found";
 // Admin Pages
 import DashboardPage from "./modules/admin/components/dashboard-page/dashboard-page";
@@ -65,8 +67,20 @@ const App = () => {
         { path: "room-details/:id", element: <RoomDetails /> },
         { path: "ad-details/:id", element: <AdDetails /> },
         { path: "explore-rooms", element: <ExplorePage /> },
+        { path: "*", element: <LandingNotFound /> },
+      ],
+    },
+    {
+      path: "/",
+      element: (
+        <LandingProtectedRoute>
+          <LandingPageLayout />
+        </LandingProtectedRoute>
+      ),
+      children: [
         { path: "favorites", element: <FavoritesPage /> },
         { path: "payment", element: <Payment /> },
+        { path: "my-booking", element: <MyBooking /> },
         { path: "*", element: <LandingNotFound /> },
       ],
     },
