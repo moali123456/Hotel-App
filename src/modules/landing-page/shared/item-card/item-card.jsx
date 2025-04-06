@@ -29,6 +29,7 @@ const ItemCard = ({
   const isLogged = useSelector((state) => state.auth.isLogged);
   const dispatch = useDispatch();
   const favorites = useSelector((state) => state.favorites.favoritesData);
+  const token = JSON.parse(localStorage?.getItem("infooooo"))?.token;
 
   // add to favorites
   const handleFavIcon = async () => {
@@ -46,16 +47,34 @@ const ItemCard = ({
       const response = await axios.post(
         ROOMS_FAVOURITES.addFav,
         { roomId },
-        BASE_HEADERS
+        {
+          headers: {
+            Authorization: `${token}`,
+            "Content-Type": "application/json",
+          },
+        }
       );
 
-      toast.success(response?.data?.message || t("add_successfuly"), {position: "top-center",});
+      toast.success(response?.data?.message || t("add_successfuly"), {
+        position: "top-center",
+      });
       console.log("Room added to favorites:", response.data);
       // Fetch updated favorites list
-     const updatedFavorites = await axios.get(ROOMS_FAVOURITES.getAllFav, BASE_HEADERS);
-     dispatch(setFavoritesData(updatedFavorites.data?.data?.favoriteRooms[0]?.rooms || []));
+      const updatedFavorites = await axios.get(ROOMS_FAVOURITES.getAllFav, {
+        headers: {
+          Authorization: `${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+      dispatch(
+        setFavoritesData(
+          updatedFavorites.data?.data?.favoriteRooms[0]?.rooms || []
+        )
+      );
     } catch (error) {
-      toast.error(error.response?.data?.message || t("wrong_message"), {position: "top-center",});
+      toast.error(error.response?.data?.message || t("wrong_message"), {
+        position: "top-center",
+      });
     }
   };
 
@@ -65,21 +84,39 @@ const ItemCard = ({
 
     try {
       const response = await axios.delete(ROOMS_FAVOURITES.deleteFav(roomId), {
-        ...BASE_HEADERS,
+        ...{
+          headers: {
+            Authorization: `${token}`,
+            "Content-Type": "application/json",
+          },
+        },
         data: { roomId },
       });
 
-      toast.success(response?.data?.message || t("remove_successfuly"), {position: "top-center",});
+      toast.success(response?.data?.message || t("remove_successfuly"), {
+        position: "top-center",
+      });
       console.log("Room removed from favorites:", response.data);
       // Call the refresh function to reload the favorite rooms
       if (refreshRooms) {
         refreshRooms();
       }
       // Fetch updated favorites list
-     const updatedFavorites = await axios.get(ROOMS_FAVOURITES.getAllFav, BASE_HEADERS);
-     dispatch(setFavoritesData(updatedFavorites.data?.data?.favoriteRooms[0]?.rooms || []));
+      const updatedFavorites = await axios.get(ROOMS_FAVOURITES.getAllFav, {
+        headers: {
+          Authorization: `${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+      dispatch(
+        setFavoritesData(
+          updatedFavorites.data?.data?.favoriteRooms[0]?.rooms || []
+        )
+      );
     } catch (error) {
-      toast.error(error.response?.data?.message || t("wrong_message"), {position: "top-center",});
+      toast.error(error.response?.data?.message || t("wrong_message"), {
+        position: "top-center",
+      });
     }
   };
 

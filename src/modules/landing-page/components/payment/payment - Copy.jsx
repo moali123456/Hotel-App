@@ -4,7 +4,6 @@ import {
   CogIcon,
   UserIcon,
   BuildingLibraryIcon,
-  CheckIcon,
 } from "@heroicons/react/24/outline";
 import "./payment.scss";
 
@@ -34,10 +33,7 @@ const Payment = () => {
           isFirstStep={(val) => setIsFirstStep(val)}
         >
           <Step onClick={() => setActiveStep(0)}>
-            {activeStep === 0 ? null : ( // <UserIcon className="h-5 w-5" />
-              <CheckIcon className="h-5 w-5" />
-            )}
-
+            <UserIcon className="h-5 w-5" />
             <div className="absolute -bottom-[4.5rem] w-max text-center">
               <Typography
                 variant="h6"
@@ -51,8 +47,7 @@ const Payment = () => {
           </Step>
 
           <Step onClick={() => setActiveStep(1)}>
-            {/* {activeStep === 0 && <CheckIcon className="h-5 w-5" />} */}
-            {activeStep === 2 ? <CheckIcon className="h-5 w-5" /> : null}
+            <CogIcon className="h-5 w-5" />
             <div className="absolute -bottom-[4.5rem] w-max text-center">
               <Typography
                 variant="h6"
@@ -66,12 +61,7 @@ const Payment = () => {
           </Step>
 
           <Step onClick={() => setActiveStep(2)}>
-            {activeStep === 3 ? <CheckIcon className="h-5 w-5" /> : null}
-            {/* {activeStep === 2 ? (
-              <CheckIcon className="h-5 w-5" />
-            ) : (
-              <BuildingLibraryIcon className="h-5 w-5" />
-            )} */}
+            <BuildingLibraryIcon className="h-5 w-5" />
             <div className="absolute -bottom-[4.5rem] w-max text-center">
               <Typography
                 variant="h6"
