@@ -55,9 +55,13 @@ const CommentsTab = ({ roomId }) => {
 
   // get comments
   const getComments = async () => {
+    if (!roomId) {
+      console.error("Invalid roomId:", roomId);
+      return;  // Exit the function if roomId is invalid
+    }
     try {
       setLoadingComments(true);
-      const response = await axios.get(ROOM_COMMENTS?.getAllComments(roomId), {
+      const response = await axios.get(ROOM_COMMENTS.getAllComments(roomId), {
         headers: {
           Authorization: `${token}`,
           "Content-Type": "application/json",

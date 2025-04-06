@@ -140,6 +140,17 @@
   "update": "Update",
   "comment_not_login": "You are not logged in. Please log in to view comments.",
   "review_not_login": "You are not logged in. Please log in to view reviews.",
+  "my_booking": "My Booking",
+  "my_favorites": "My Favorites",
+  "welcome": "Welcome",
+  "start_date": "Start Date",
+  "end_date": "End Date",
+  "date": "Date",
+  "checkout": "Checkout",
+  "details": "Details",
+  "booking_total_price": "Booking Total Price",
+  "booking_start_date": "Booking Start Date",
+  "booking_end_date": "Booking End Date",
 
   "home_page": {
     "banner_title_1": "Forget Busy Work,",

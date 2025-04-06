@@ -24,6 +24,7 @@ const Images = {
   trash_img: new URL("./svg/trash-img.svg", import.meta.url).href,
   add_comment: new URL("./svg/add-comment.svg", import.meta.url).href,
   add_review: new URL("./svg/add-review.svg", import.meta.url).href,
+  book_banner: new URL("./png/book-room.png", import.meta.url).href,
   // menu items
   catug_icon: new URL("./svg/sidebar/catug.svg", import.meta.url).href,
   date_icon: new URL("./svg/sidebar/date.svg", import.meta.url).href,
