@@ -82,6 +82,7 @@ export function MenuBar() {
   const isLogged = useSelector((state) => state.auth.isLogged);
   const { userProfileData } = useSelector((state) => state.profile);
   const { favoritesData } = useSelector((state) => state.favorites);
+  const token = JSON.parse(localStorage?.getItem("infooooo"))?.token;
 
   // get user profile info
   const userProfileInfo = async () => {
@@ -92,13 +93,9 @@ export function MenuBar() {
         ),
         {
           headers: {
-            Authorization: `${JSON.parse(localStorage?.getItem("infooooo"))?.token}`,
+            Authorization: `${token}`,
+            "Content-Type": "application/json",
           },
-          // headers: {
-          //   Authorization: `${
-          //     JSON.parse(localStorage.getItem("infooooo")).token
-          //   }`,
-          // },
         }
       );
       console.log(response, "response");

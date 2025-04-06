@@ -15,16 +15,18 @@ const FavoritesPage = () => {
   const [roomsList, setRoomsList] = useState([]);
   const [loading, setLoading] = useState(false);
   const isLogged = useSelector((state) => state.auth.isLogged);
-
+  const token = JSON.parse(localStorage?.getItem("infooooo"))?.token;
 
   // get all favorites
   const getRoomsList = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(
-        `${ROOMS_FAVOURITES.getAllFav}`,
-        BASE_HEADERS
-      );
+      const response = await axios.get(`${ROOMS_FAVOURITES.getAllFav}`, {
+        headers: {
+          Authorization: `${token}`,
+          "Content-Type": "application/json",
+        },
+      });
       setRoomsList(response.data?.data?.favoriteRooms[0]?.rooms || []);
       //console.log(response.data?.data?.favoriteRooms[0]?.rooms);
     } catch (error) {
@@ -87,7 +89,6 @@ const FavoritesPage = () => {
             {/*  */}
           </div>
         )}
-
       </div>
     </div>
   );
