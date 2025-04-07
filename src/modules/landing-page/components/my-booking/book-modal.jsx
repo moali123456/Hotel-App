@@ -135,7 +135,7 @@ const BookingDetailsModal = ({ open, onClose, data, bookLoading }) => {
                         <img
                           src={imagesList[0]}
                           alt="pic"
-                          className="w-full rounded-2xl object-cover max-h-[500px]"
+                          className="w-full rounded-2xl object-cover min-h-[420px] max-h-[420px]"
                           loading="lazy"
                         />
                       </div>

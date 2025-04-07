@@ -10,7 +10,7 @@ const LogOut = ({ logoutContent }) => {
 
   return (
     <>
-      <span className="logout_btn cursor-pointer" onClick={logoutBtn}>
+      <span className="logout_btn cursor-pointer flex gap-2" onClick={logoutBtn}>
         {logoutContent?.photo} {logoutContent?.text}
       </span>
     </>

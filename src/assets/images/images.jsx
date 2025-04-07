@@ -37,6 +37,7 @@ const Images = {
   lockIcon: new URL("./svg/sidebar/lock.svg", import.meta.url).href,
   ads_icon: new URL("./svg/sidebar/ads.svg", import.meta.url).href,
   defaultImage: new URL("./svg/default-image.svg", import.meta.url).href,
+  small_logo: new URL("./png/sidebar-logo.png", import.meta.url).href,
   // room items
   ic_icon: new URL("./svg/room/ic_ac.svg", import.meta.url).href,
   bathroom_icon: new URL("./svg/room/ic_bathroom.svg", import.meta.url).href,
