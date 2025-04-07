@@ -1,15 +1,10 @@
 import i18n from "i18next";
-// import { useEffect } from "react";
-// import { useDispatch, useSelector } from "react-redux";
-// import { ROOMS_FAVOURITES } from "./constants/END_POINTS";
-// import { BASE_HEADERS } from "./constants/app-constants";
-// import axios from "axios";
-// import { setFavoritesData } from "./redux/favoritesSlice";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 // Protected Routes
 import AuthProtectedRoute from "./modules/shared/protected-route/auth-protected-route";
 import AdminProtectedRoute from "./modules/shared/protected-route/admin-protected-route";
 import LandingProtectedRoute from "./modules/shared/protected-route/landing-protected-route";
+import PublicProtectedRoute from "./modules/shared/protected-route/public-protected-route";
 // Layouts
 import LandingPageLayout from "./modules/layouts/components/landing-page-layout/landing-page-layout";
 import AuthLayout from "./modules/layouts/components/auth-layout/auth-layout";
@@ -31,6 +26,7 @@ import MyBooking from "./modules/landing-page/components/my-booking/my-booking";
 import LandingNotFound from "./modules/landing-page/components/landing-not-found/landing-not-found";
 // Admin Pages
 import DashboardPage from "./modules/admin/components/dashboard-page/dashboard-page";
+import RoomsAdminPage from "./modules/admin/components/rooms-page/rooms-page";
 import AdminNotFound from "./modules/admin/components/admin-not-found/admin-not-found";
 
 //toastify
@@ -39,28 +35,14 @@ import "react-toastify/dist/ReactToastify.css";
 
 const App = () => {
   document.documentElement.lang = i18n.language;
-  // const dispatch = useDispatch();
-  // const isLogged = useSelector((state) => state.auth.isLogged);
-
-  // useEffect(() => {
-  //   const fetchFavorites = async () => {
-  //     try {
-  //       const response = await axios.get(ROOMS_FAVOURITES.getAllFav, BASE_HEADERS);
-  //       dispatch(setFavoritesData(response.data?.data?.favoriteRooms[0]?.rooms || []));
-  //     } catch (error) {
-  //       console.error("Error fetching favorites:", error);
-  //     }
-  //   };
-  
-  //   if (isLogged) {
-  //     fetchFavorites();
-  //   }
-  // }, [isLogged, dispatch]);
-
   const routes = createBrowserRouter([
     {
       path: "/",
-      element: <LandingPageLayout />,
+      element: (
+        <PublicProtectedRoute>
+          <LandingPageLayout />
+        </PublicProtectedRoute>
+      ),
       children: [
         { index: true, element: <HomePage /> },
         { path: "home", element: <HomePage /> },
@@ -110,6 +92,7 @@ const App = () => {
       children: [
         { index: true, element: <DashboardPage /> },
         { path: "home", element: <DashboardPage /> },
+        { path: "admin-rooms", element: <RoomsAdminPage /> },
         { path: "*", element: <AdminNotFound /> },
       ],
     },

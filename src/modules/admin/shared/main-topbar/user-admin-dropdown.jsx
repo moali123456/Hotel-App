@@ -8,15 +8,11 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import {
-  ClipboardDocumentListIcon,
-  HeartIcon,
   ArrowRightStartOnRectangleIcon,
 } from "@heroicons/react/24/solid";
 import LogOut from "../../../shared/logout/logout";
-import { Link } from "react-router-dom";
-import "./user-dropdown.scss";
 
-const UserDropdown = ({ imagePath, userName }) => {
+const UserAdminDropdown = ({ imagePath, userName }) => {
   const { t } = useTranslation();
 
   return (
@@ -26,7 +22,7 @@ const UserDropdown = ({ imagePath, userName }) => {
           <Avatar
             variant="circular"
             alt="profile"
-            className="cursor-pointer object-top !size-10"
+            className="cursor-pointer object-top !size-9.5"
             src={imagePath}
           />
         </div>
@@ -53,7 +49,7 @@ const UserDropdown = ({ imagePath, userName }) => {
           </Typography>
         </MenuItem>
 
-        <MenuItem>
+        {/* <MenuItem>
           <Link to="/favorites" className="flex items-center gap-2">
             <div className="size-6 text-[#90A4AE]">
               <HeartIcon />
@@ -75,15 +71,20 @@ const UserDropdown = ({ imagePath, userName }) => {
               {t("my_booking")}
             </Typography>
           </Link>
-        </MenuItem>
+        </MenuItem> */}
 
         <hr className="my-2 border-[#eceff1]" />
         <MenuItem className="pb-0 pt-1">
-          <Typography variant="small" className="font-medium text-[#152C5B] w-full">
+          <Typography
+            variant="small"
+            className="font-medium text-[#152C5B] w-full"
+          >
             <LogOut
               logoutContent={{
                 text: t("logout"),
-                photo: <ArrowRightStartOnRectangleIcon className="size-6 text-[#90A4AE]" />,
+                photo: (
+                  <ArrowRightStartOnRectangleIcon className="size-6 text-[#90A4AE]" />
+                ),
               }}
             />
           </Typography>
@@ -93,4 +94,4 @@ const UserDropdown = ({ imagePath, userName }) => {
   );
 };
 
-export default UserDropdown;
+export default UserAdminDropdown;

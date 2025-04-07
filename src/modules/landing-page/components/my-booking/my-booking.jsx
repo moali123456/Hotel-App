@@ -30,15 +30,18 @@ const MyBooking = () => {
   const [bookData, setBookData] = useState({});
   // modal
   const [openModal, setOpenModal] = useState(false);
+  const token = JSON.parse(localStorage?.getItem("infooooo"))?.token;
 
   // get book details
   const getBookDetails = async (id) => {
     try {
       setBookLoading(true);
-      const response = await axios.get(
-        ROOM_BOOKING.getBookDetails(id),
-        BASE_HEADERS
-      );
+      const response = await axios.get(ROOM_BOOKING.getBookDetails(id), {
+        headers: {
+          Authorization: `${token}`,
+          "Content-Type": "application/json",
+        },
+      });
       setBookData(response?.data?.data?.booking);
     } catch (error) {
       console.error("Error fetching book details:", error);
@@ -55,10 +58,12 @@ const MyBooking = () => {
   const getBooking = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(
-        ROOM_BOOKING.getAllBooking,
-        BASE_HEADERS
-      );
+      const response = await axios.get(ROOM_BOOKING.getAllBooking, {
+        headers: {
+          Authorization: `${token}`,
+          "Content-Type": "application/json",
+        },
+      });
       setBook(response?.data?.data?.myBooking);
       console.log(response?.data?.data?.myBooking);
     } catch (error) {
@@ -143,7 +148,10 @@ const MyBooking = () => {
                         </CardBody>
 
                         <CardFooter className="p-0 border-t border-[#ebe6e7] flex w-full">
-                          <Link to="/payment" className="flex-1 flex gap-1.5 text-center justify-center items-center py-4 px-4 border-e border-[#ebe6e7] cursor-pointer">
+                          <Link
+                            to="/payment"
+                            className="flex-1 flex gap-1.5 text-center justify-center items-center py-4 px-4 border-e border-[#ebe6e7] cursor-pointer"
+                          >
                             <PencilIcon className="w-5 text-[#99a1af]" />{" "}
                             {t("checkout")}
                           </Link>
