@@ -82,6 +82,7 @@
   "edit": "Edit",
   "delete": "Delete",
   "cancle": "Cancle",
+  "no_data": "No data available",
 
   "facilities": "Facilities",
   "select_facilities": "Select facilities",

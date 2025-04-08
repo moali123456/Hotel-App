@@ -150,6 +150,7 @@
   "total_price": "السعر الإجمالي للحجز",
   "booking_start_date": "تاريخ بداية الحجز",
   "booking_end_date": "تاريخ نهاية الحجز",
+  "no_data": "لا توجد بيانات",
 
   "home_page": {
     "banner_title_1": "انسَ العمل المزدحم،",
