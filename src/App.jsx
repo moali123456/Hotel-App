@@ -27,6 +27,8 @@ import LandingNotFound from "./modules/landing-page/components/landing-not-found
 // Admin Pages
 import DashboardPage from "./modules/admin/components/dashboard-page/dashboard-page";
 import RoomsAdminPage from "./modules/admin/components/rooms-page/rooms-page";
+import AddRoom from "./modules/admin/components/add-room/add-room";
+import UpdateRoom from "./modules/admin/components/update-room/update-room";
 import AdminNotFound from "./modules/admin/components/admin-not-found/admin-not-found";
 
 //toastify
@@ -93,6 +95,8 @@ const App = () => {
         { index: true, element: <DashboardPage /> },
         { path: "home", element: <DashboardPage /> },
         { path: "admin-rooms", element: <RoomsAdminPage /> },
+        { path: "add-room", element: <AddRoom /> },
+        { path: "update-room/:id", element: <UpdateRoom /> },
         { path: "*", element: <AdminNotFound /> },
       ],
     },

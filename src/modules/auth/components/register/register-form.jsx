@@ -17,6 +17,7 @@ const RegisterForm = () => {
   const [uploadedFile, setUploadedFile] = useState(null);
   const [previewUrl] = useState(null);
   const [fileError, setFileError] = useState(false);
+  const [maxLengthError, setMaxLengthError] = useState(false);
 
   const [passwordShown, setPasswordShown] = useState(false);
   const [confirmPassShown, setConfirmPassShown] = useState(false);
@@ -304,7 +305,29 @@ const RegisterForm = () => {
 
         {/* upload Field */}
         <div className="mt-6 mb-8">
-          <UploadFile
+        <UploadFile
+            uploadedFiles={uploadedFiles}
+            setUploadedFiles={setUploadedFiles}
+            fileError={fileError}
+            setFileError={setFileError}
+            setUploadedFile={setUploadedFile}
+            maxLength={1}
+            maxLengthError={maxLengthError}
+            setMaxLengthError={setMaxLengthError}
+          />
+
+          {/* Display error messages */}
+          {fileError && !maxLengthError && (
+            <p className="mt-1 text-[#ff3728] text-[14px] font-[500]">
+              {t("upload_required")}
+            </p>
+          )}
+          {maxLengthError && !fileError && (
+            <p className="mt-1 text-[#ff3728] text-[14px] font-[500]">
+              {t("max_files_error", { maxLength: 3 })}
+            </p>
+          )}
+          {/* <UploadFile
             uploadedFiles={uploadedFiles}
             setUploadedFiles={setUploadedFiles}
             fileError={fileError} 
@@ -312,12 +335,11 @@ const RegisterForm = () => {
             setUploadedFile={setUploadedFile}
           />
 
-          {/* Display the error message */}
           {fileError && (
             <p className="mt-1 text-[#ff3728] text-[14px] font-[500]">
               {t("upload_required")}
             </p>
-          )}
+          )} */}
         </div>
 
         {/* Submit Button */}

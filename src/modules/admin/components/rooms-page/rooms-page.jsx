@@ -12,29 +12,34 @@ import {
   MenuItem,
 } from "@material-tailwind/react";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/solid";
-import {
-  ArrowRightIcon,
-  ArrowLeftIcon,
-  EyeIcon,
-  TrashIcon,
-  PencilIcon,
-} from "@heroicons/react/24/outline";
+import { EyeIcon, TrashIcon, PencilIcon } from "@heroicons/react/24/outline";
+import { useNavigate } from "react-router-dom";
 import SkeletonOne from "../../../landing-page/shared/skeleton/skeleton-one";
 import { ROOMS_ADMIN_URLS } from "../../../../constants/ADMIN_END_POINTS";
 import axios from "axios";
 import Images from "../../../../assets/Images/Images";
+import MainPagination from "../../shared/main-pagination/main-pagination";
+import DetailsModal from "./details-modal";
 import "./rooms-page.scss";
 
 const RoomsAdminPage = () => {
   const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
   const [roomsList, setRoomsList] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [openDetails, setOpenDetails] = useState(false);
+  const [selectedRoom, setSelectedRoom] = useState(null);
   const [totalCount, setTotalCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
 
   const token = JSON.parse(localStorage?.getItem("infooooo"))?.token;
   const totalPages = Math.ceil(totalCount / itemsPerPage);
+
+  const handleOpenDetails = (roomId = null) => {
+    setSelectedRoom(roomId);
+    setOpenDetails(!openDetails);
+  };
 
   // get all rooms
   const getRoomsList = async (page) => {
@@ -102,8 +107,8 @@ const RoomsAdminPage = () => {
             <Button
               className="flex items-center gap-3 bg-[#203FC7] cursor-pointer h-10"
               size="sm"
+              onClick={() => navigate("/dashboard/add-room")}
             >
-              {/* <ArrowDownTrayIcon strokeWidth={2} className="h-4 w-4" />{" "} */}
               {t("add_new_room")}
             </Button>
           </div>
@@ -213,18 +218,28 @@ const RoomsAdminPage = () => {
                               <MenuHandler>
                                 <IconButton
                                   variant="text"
-                                  className="cursor-pointer"
+                                  className="cursor-pointer outline-0"
                                 >
                                   <EllipsisVerticalIcon className="size-6" />
                                 </IconButton>
                               </MenuHandler>
                               <MenuList className="border border-[#eceff1]">
-                                <MenuItem className="flex gap-1">
+                                <MenuItem
+                                  className="flex gap-1"
+                                  onClick={() => handleOpenDetails(room?._id)}
+                                >
                                   <EyeIcon className="size-4 text-[#8b8b8b]" />
                                   {t("view")}
                                 </MenuItem>
                                 <hr className="my-1 border-[#e0e0e0] hover:shadow-none outline-0" />
-                                <MenuItem className="flex gap-1">
+                                <MenuItem
+                                  className="flex gap-1"
+                                  onClick={() =>
+                                    navigate(
+                                      `/dashboard/update-room/${room?._id}`
+                                    )
+                                  }
+                                >
                                   <PencilIcon className="size-4 text-[#8b8b8b]" />
                                   {t("edit")}
                                 </MenuItem>
@@ -255,66 +270,25 @@ const RoomsAdminPage = () => {
 
             {/* pagination */}
             {totalPages > 1 && (
-              <div className="flex items-center gap-4 justify-center mb-10 mt-10">
-                <Button
-                  variant="text"
-                  className="flex items-center gap-2 cursor-pointer"
-                  onClick={() =>
-                    setCurrentPage((prev) => Math.max(prev - 1, 1))
-                  }
-                  disabled={currentPage === 1}
-                >
-                  <ArrowLeftIcon
-                    strokeWidth={2}
-                    className="h-4 w-4"
-                    style={{
-                      transform: i18n.language === "ar" ? "rotate(180deg)" : "",
-                    }}
-                  />{" "}
-                  {t("previous")}
-                </Button>
-
-                <div className="flex items-center gap-2">
-                  {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                    (page) => (
-                      <IconButton
-                        key={page}
-                        variant={currentPage === page ? "filled" : "text"}
-                        color="gray"
-                        className={`cursor-pointer ${
-                          currentPage === page ? "bg-[#3252DF]" : ""
-                        }`}
-                        onClick={() => setCurrentPage(page)}
-                      >
-                        {page}
-                      </IconButton>
-                    )
-                  )}
-                </div>
-
-                <Button
-                  variant="text"
-                  className="flex items-center gap-2 cursor-pointer"
-                  onClick={() =>
-                    setCurrentPage((prev) => Math.min(prev + 1, totalPages))
-                  }
-                  disabled={currentPage === totalPages}
-                >
-                  {t("next")}{" "}
-                  <ArrowRightIcon
-                    strokeWidth={2}
-                    className="h-4 w-4"
-                    style={{
-                      transform: i18n.language === "ar" ? "rotate(180deg)" : "",
-                    }}
-                  />
-                </Button>
-              </div>
+              <>
+                <MainPagination
+                  setCurrentPage={setCurrentPage}
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                />
+              </>
             )}
           </>
         )}
       </div>
       {/*  */}
+
+      {/* details modal */}
+      <DetailsModal
+        open={openDetails}
+        handleOpen={handleOpenDetails}
+        roomId={selectedRoom}
+      />
     </div>
   );
 };

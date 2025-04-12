@@ -151,6 +151,10 @@
   "booking_start_date": "تاريخ بداية الحجز",
   "booking_end_date": "تاريخ نهاية الحجز",
   "no_data": "لا توجد بيانات",
+  "close": "اغلاق",
+  "facilities_required": "المرافق مطلوبة",
+  "max_files_error": "لقد تجاوزت عدد الصور المسحموح بها",
+  "room_updated_successfuly": "تم تحديث الغرفة بنجاح",
 
   "home_page": {
     "banner_title_1": "انسَ العمل المزدحم،",

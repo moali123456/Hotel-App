@@ -110,7 +110,7 @@
   "continue_book": "Continue Book",
   "you_will_pay": "You will pay",
   "per": "per",
-  "person": "Person",
+  "person": "Person(s)",
   "rate": "Rate",
   "message": "Message",
   "add_your_comment": "Add Your Comment",
@@ -152,6 +152,10 @@
   "booking_total_price": "Booking Total Price",
   "booking_start_date": "Booking Start Date",
   "booking_end_date": "Booking End Date",
+  "close": "Close",
+  "facilities_required": "Facilities is required",
+  "max_files_error": "You have exceeded the number of allowed images.",
+  "room_updated_successfuly": "Room updated successfuly",
 
   "home_page": {
     "banner_title_1": "Forget Busy Work,",

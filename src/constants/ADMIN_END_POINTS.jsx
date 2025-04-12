@@ -14,6 +14,7 @@ export const ROOMS_ADMIN_URLS = {
   getAll: `${BASE_ADMIN_ROOMS}`,
   getRoomDetails: (id) => `${BASE_ADMIN_ROOMS}/${id}`,
   addRoom: `${BASE_ADMIN_ROOMS}`,
+  updateRoom: (id) => `${BASE_ADMIN_ROOMS}/${id}`,
 };
 
 // ROOMS FACILITIES ADMIN URL
