@@ -29,6 +29,7 @@ import DashboardPage from "./modules/admin/components/dashboard-page/dashboard-p
 import RoomsAdminPage from "./modules/admin/components/rooms-page/rooms-page";
 import AddRoom from "./modules/admin/components/add-room/add-room";
 import UpdateRoom from "./modules/admin/components/update-room/update-room";
+import FacilitiesPage from "./modules/admin/components/facilities-page/facilities-page";
 import AdminNotFound from "./modules/admin/components/admin-not-found/admin-not-found";
 
 //toastify
@@ -97,6 +98,7 @@ const App = () => {
         { path: "admin-rooms", element: <RoomsAdminPage /> },
         { path: "add-room", element: <AddRoom /> },
         { path: "update-room/:id", element: <UpdateRoom /> },
+        { path: "facilities", element: <FacilitiesPage /> },
         { path: "*", element: <AdminNotFound /> },
       ],
     },

@@ -20,6 +20,8 @@ import axios from "axios";
 import Images from "../../../../assets/Images/Images";
 import MainPagination from "../../shared/main-pagination/main-pagination";
 import DetailsModal from "./details-modal";
+import DeleteModal from "../../shared/delete-modal/delete-modal";
+import { toast } from "react-toastify";
 import "./rooms-page.scss";
 
 const RoomsAdminPage = () => {
@@ -28,6 +30,7 @@ const RoomsAdminPage = () => {
   const [roomsList, setRoomsList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [openDetails, setOpenDetails] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
   const [selectedRoom, setSelectedRoom] = useState(null);
   const [totalCount, setTotalCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
@@ -39,6 +42,11 @@ const RoomsAdminPage = () => {
   const handleOpenDetails = (roomId = null) => {
     setSelectedRoom(roomId);
     setOpenDetails(!openDetails);
+  };
+
+  const handleOpenDelete = (roomId = null) => {
+    setSelectedRoom(roomId);
+    setOpenDelete(!openDelete);
   };
 
   // get all rooms
@@ -60,6 +68,30 @@ const RoomsAdminPage = () => {
       console.error("Error fetching rooms:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  // delete room
+  const handleDeleteRoom = async () => {
+    try {
+      const response = await axios.delete(
+        ROOMS_ADMIN_URLS.deleteRoom(selectedRoom),
+        {
+          headers: {
+            Authorization: `${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      toast.success(t("room_deleted_successfuly"));
+      // Reload rooms list after successful deletion
+      await getRoomsList(currentPage);
+      // Close the delete modal
+      setOpenDelete(false);
+      // Clear the selected room
+      setSelectedRoom(null);
+    } catch (error) {
+      toast.error(error.response?.data?.message);
     }
   };
 
@@ -244,7 +276,10 @@ const RoomsAdminPage = () => {
                                   {t("edit")}
                                 </MenuItem>
                                 <hr className="my-1 border-[#e0e0e0] hover:shadow-none outline-0" />
-                                <MenuItem className="flex gap-1">
+                                <MenuItem
+                                  className="flex gap-1"
+                                  onClick={() => handleOpenDelete(room?._id)}
+                                >
                                   <TrashIcon className="size-4 text-[#8b8b8b]" />
                                   {t("delete")}
                                 </MenuItem>
@@ -288,6 +323,15 @@ const RoomsAdminPage = () => {
         open={openDetails}
         handleOpen={handleOpenDetails}
         roomId={selectedRoom}
+      />
+
+      {/* delete modal */}
+      <DeleteModal
+        open={openDelete}
+        handleOpen={handleOpenDelete}
+        roomId={selectedRoom}
+        onSubmit={handleDeleteRoom}
+        confirmText={t("delete_room_confirm")}
       />
     </div>
   );

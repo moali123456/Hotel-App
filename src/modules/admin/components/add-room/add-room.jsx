@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { Input, Button, Spinner } from "@material-tailwind/react";
@@ -14,6 +15,7 @@ import "./add-room.scss";
 
 const AddRoom = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [uploadedFile, setUploadedFile] = useState(null);
   const [previewUrl] = useState(null);
   const [fileError, setFileError] = useState(false);
@@ -57,7 +59,7 @@ const AddRoom = () => {
         roomData,
         BASE_HEADERS
       );
-      toast.success(response?.data?.message || "Room added successfully");
+      toast.success(response?.data?.message || t("room_added_successfully"));
 
       reset(); // Reset the form fields
       setUploadedFile(null); // Reset the uploaded file
@@ -68,10 +70,11 @@ const AddRoom = () => {
       if (previewUrl) {
         URL.revokeObjectURL(previewUrl); // Cleanup the preview URL
       }
+      navigate("/dashboard/admin-rooms");
 
       console.log(response);
     } catch (error) {
-      toast.error(error.response?.data?.message);
+      toast.error(error.response?.data?.message || t("some_thing_wrong"));
     }
   };
 

@@ -54,6 +54,7 @@ const UpdateRoom = () => {
     return formData;
   };
 
+  // update room
   const onSubmit = async (data) => {
     const roomData = appendToFormData(data);
     console.log(data);
