@@ -18,6 +18,17 @@ export const ROOMS_ADMIN_URLS = {
   deleteRoom: (id) => `${BASE_ADMIN_ROOMS}/${id}`,
 };
 
+// ADS ADMIN URL
+const BASE_ADMIN_ADS = `${BASE_URL}/admin/ads`;
+
+export const ADS_ADMIN_URLS = {
+  getAllAds: `${BASE_ADMIN_ADS}`,
+//   getRoomDetails: (id) => `${BASE_ADMIN_ADS}/${id}`,
+//   addRoom: `${BASE_ADMIN_ADS}`,
+//   updateRoom: (id) => `${BASE_ADMIN_ADS}/${id}`,
+//   deleteRoom: (id) => `${BASE_ADMIN_ADS}/${id}`,
+};
+
 // ROOMS FACILITIES ADMIN URL
 const BASE_ADMIN_ROOMS_FACILITIES = `${BASE_URL}/admin/room-facilities`;
 

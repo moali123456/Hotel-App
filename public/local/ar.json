@@ -171,6 +171,10 @@
   "update_facility": "تحديث المرفق",
   "facility_deleted_successfuly": "تم حذف المرفق بنجاح",
   "delete_facility_confirm": "هل انت متاكد انك تريد حذف هذا المرفق؟",
+  "ads_page_title": "تفاصيل صفحة الاعلانات",
+  "ads_page_sub_title": "يمكنك التحقق من كافة التفاصيل",
+  "add_new_ad": "اضافة اعلان",
+  "active": "مفعل",
 
   "home_page": {
     "banner_title_1": "انسَ العمل المزدحم،",

@@ -30,6 +30,7 @@ import RoomsAdminPage from "./modules/admin/components/rooms-page/rooms-page";
 import AddRoom from "./modules/admin/components/add-room/add-room";
 import UpdateRoom from "./modules/admin/components/update-room/update-room";
 import FacilitiesPage from "./modules/admin/components/facilities-page/facilities-page";
+import AdsPage from "./modules/admin/components/ads-page/ads-page";
 import AdminNotFound from "./modules/admin/components/admin-not-found/admin-not-found";
 
 //toastify
@@ -99,6 +100,7 @@ const App = () => {
         { path: "add-room", element: <AddRoom /> },
         { path: "update-room/:id", element: <UpdateRoom /> },
         { path: "facilities", element: <FacilitiesPage /> },
+        { path: "ads", element: <AdsPage /> },
         { path: "*", element: <AdminNotFound /> },
       ],
     },

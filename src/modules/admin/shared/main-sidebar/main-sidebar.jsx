@@ -108,6 +108,7 @@ const MainSidebar = ({ sideBarCollapsed, setSideBarCollapsed }) => {
                 <MenuItem
                   icon={<img src={Images.ads_icon} className="w-7" alt="pic" />}
                   className="text-white text-[15px]"
+                  onClick={() => navigate("/dashboard/ads")}
                 />
               </div>
             </Tooltip>
@@ -115,6 +116,7 @@ const MainSidebar = ({ sideBarCollapsed, setSideBarCollapsed }) => {
             <MenuItem
               icon={<img src={Images.ads_icon} className="w-7" alt="pic" />}
               className="text-white text-[15px]"
+              onClick={() => navigate("/dashboard/ads")}
             >
               {t("ads")}
             </MenuItem>
