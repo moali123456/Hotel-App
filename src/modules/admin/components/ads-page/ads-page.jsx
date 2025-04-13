@@ -19,6 +19,7 @@ import axios from "axios";
 import { ADS_ADMIN_URLS } from "../../../../constants/ADMIN_END_POINTS";
 import Images from "../../../../assets/Images/Images";
 import MainPagination from "../../shared/main-pagination/main-pagination";
+import AddAdsModal from "./add-ads-modal";
 import "./ads-page.scss";
 
 const AdsPage = () => {
@@ -26,11 +27,17 @@ const AdsPage = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [adsList, setAdsList] = useState([]);
+  const [openAddAds, setOpenAddAds] = useState(false);
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(6);
 
   const token = JSON.parse(localStorage?.getItem("infooooo"))?.token;
+
+  // open add modal
+  const handleOpenAddAds = () => {
+    setOpenAddAds(!openAddAds);
+  };
 
   // get all facilities
   const getALLAds = async () => {
@@ -99,7 +106,7 @@ const AdsPage = () => {
             <Button
               className="flex items-center gap-3 bg-[#203FC7] cursor-pointer h-10"
               size="sm"
-              //onClick={() => handleOpenAddFacilities()}
+              onClick={() => handleOpenAddAds()}
             >
               {t("add_new_ad")}
             </Button>
@@ -196,23 +203,9 @@ const AdsPage = () => {
                             variant="small"
                             className="font-medium text-[#263238]"
                           >
-                            {room?.isActive}
+                            {room?.isActive ? t("active") : t("not_active")}
                           </Typography>
                         </td>
-
-                        {/* room facility */}
-                        {/* <td className="p-4 border-b border-[#e0e0e0]">
-                          <span className="flex gap-[6px] flex-wrap max-w-80">
-                            {room?.room?.facilities.map((facility, index) => (
-                              <span
-                                className="bg-[#dedede] rounded-full px-3 py-1 text-xs"
-                                key={index}
-                              >
-                                {facility.name}
-                              </span>
-                            ))}
-                          </span>
-                        </td> */}
 
                         <td className="p-4 border-b border-[#e0e0e0]">
                           <Tooltip content="Edit User">
@@ -226,20 +219,18 @@ const AdsPage = () => {
                                 </IconButton>
                               </MenuHandler>
                               <MenuList className="border border-[#eceff1]">
-                                <MenuItem
+                                {/* <MenuItem
                                   className="flex gap-1"
-                                  //onClick={() => handleOpenDetails(room?._id)}
+                                  onClick={() => handleOpenDetails(room?._id)}
                                 >
                                   <EyeIcon className="size-4 text-[#8b8b8b]" />
                                   {t("view")}
                                 </MenuItem>
-                                <hr className="my-1 border-[#e0e0e0] hover:shadow-none outline-0" />
+                                <hr className="my-1 border-[#e0e0e0] hover:shadow-none outline-0" /> */}
                                 <MenuItem
                                   className="flex gap-1"
                                   onClick={() =>
-                                    navigate(
-                                      `/dashboard/update-room/${room?._id}`
-                                    )
+                                    handleOpenUpdateFacilities(room?.room?._id)
                                   }
                                 >
                                   <PencilIcon className="size-4 text-[#8b8b8b]" />
@@ -284,6 +275,14 @@ const AdsPage = () => {
           </>
         )}
       </div>
+
+      {/* add modal */}
+      <AddAdsModal
+        open={openAddAds}
+        handleOpen={handleOpenAddAds}
+        //reloadFacilities={fetchFacilities}
+      />
+
     </div>
   );
 };
