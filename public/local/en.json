@@ -172,6 +172,10 @@
   "update_facility": "Update facility",
   "facility_deleted_successfuly": "Facility deleted successfuly",
   "delete_facility_confirm": "Are you sure you want to delete this facility?",
+  "ads_page_title": "Ads Table Details",
+  "ads_page_sub_title": "You can check all details",
+  "add_new_ad": "Add New Ad",
+  "active": "Active",
 
   "home_page": {
     "banner_title_1": "Forget Busy Work,",

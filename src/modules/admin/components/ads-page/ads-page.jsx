@@ -15,89 +15,45 @@ import { EllipsisVerticalIcon } from "@heroicons/react/24/solid";
 import { EyeIcon, TrashIcon, PencilIcon } from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router-dom";
 import SkeletonOne from "../../../landing-page/shared/skeleton/skeleton-one";
-import { ROOMS_ADMIN_URLS } from "../../../../constants/ADMIN_END_POINTS";
 import axios from "axios";
+import { ADS_ADMIN_URLS } from "../../../../constants/ADMIN_END_POINTS";
 import Images from "../../../../assets/Images/Images";
 import MainPagination from "../../shared/main-pagination/main-pagination";
-import DetailsModal from "./details-modal";
-import DeleteModal from "../../shared/delete-modal/delete-modal";
-import { toast } from "react-toastify";
-import "./rooms-page.scss";
+import "./ads-page.scss";
 
-const RoomsAdminPage = () => {
+const AdsPage = () => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
-  const [roomsList, setRoomsList] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [openDetails, setOpenDetails] = useState(false);
-  const [openDelete, setOpenDelete] = useState(false);
-  const [selectedRoom, setSelectedRoom] = useState(null);
-  const [totalCount, setTotalCount] = useState(0);
+  const [adsList, setAdsList] = useState([]);
+  // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 6;
+  const [itemsPerPage] = useState(6);
 
   const token = JSON.parse(localStorage?.getItem("infooooo"))?.token;
-  const totalPages = Math.ceil(totalCount / itemsPerPage);
 
-  const handleOpenDetails = (roomId = null) => {
-    setSelectedRoom(roomId);
-    setOpenDetails(!openDetails);
-  };
-
-  const handleOpenDelete = (roomId = null) => {
-    setSelectedRoom(roomId);
-    setOpenDelete(!openDelete);
-  };
-
-  // get all rooms
-  const getRoomsList = async (page) => {
+  // get all facilities
+  const getALLAds = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(
-        `${ROOMS_ADMIN_URLS.getAll}?page=${page}&size=${itemsPerPage}`,
-        {
-          headers: {
-            Authorization: `${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      setRoomsList(response.data?.data?.rooms || []);
-      setTotalCount(response.data?.data?.totalCount || 0);
+      const response = await axios.get(ADS_ADMIN_URLS.getAllAds, {
+        headers: {
+          Authorization: `${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+      setAdsList(response.data.data.ads);
+      console.log(response.data.data.ads);
     } catch (error) {
-      console.error("Error fetching rooms:", error);
+      console.error("Error fetching facilities:", error);
     } finally {
       setLoading(false);
     }
   };
 
-  // delete room
-  const handleDeleteRoom = async () => {
-    try {
-      const response = await axios.delete(
-        ROOMS_ADMIN_URLS.deleteRoom(selectedRoom),
-        {
-          headers: {
-            Authorization: `${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      toast.success(t("room_deleted_successfuly"));
-      // Reload rooms list after successful deletion
-      await getRoomsList(currentPage);
-      // Close the delete modal
-      setOpenDelete(false);
-      // Clear the selected room
-      setSelectedRoom(null);
-    } catch (error) {
-      toast.error(error.response?.data?.message);
-    }
-  };
-
   useEffect(() => {
-    getRoomsList(currentPage);
-  }, [currentPage]);
+    getALLAds();
+  }, []);
 
   const TABLE_HEAD = [
     t("room_number"),
@@ -105,12 +61,16 @@ const RoomsAdminPage = () => {
     t("price"),
     t("discount"),
     t("capacity"),
-    t("facilities"),
+    t("active"),
     "",
   ];
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = adsList.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(adsList.length / itemsPerPage);
 
   return (
-    <div id="admin_rooms">
+    <div id="ads_page">
       <div className="">
         {/* page title */}
         <div className="mb-4 flex flex-col justify-between gap-8 md:flex-row md:items-center">
@@ -120,33 +80,33 @@ const RoomsAdminPage = () => {
               color="blue-gray"
               className="text-[#1F263E]"
             >
-              {t("rooms_page_title")}
+              {t("ads_page_title")}
             </Typography>
             <Typography
               color="gray"
               className="mt-1 font-normal text-[#8b8b8b]"
             >
-              {t("rooms_page_sub_title")}
+              {t("ads_page_sub_title")}
             </Typography>
           </div>
           <div className="flex w-full shrink-0 gap-2 md:w-max">
             {/* <div className="w-full md:w-72">
-                <Input
-                  label="Search"
-                  icon={<MagnifyingGlassIcon className="h-5 w-5" />}
-                />
-              </div> */}
+            <Input
+                label="Search"
+                icon={<MagnifyingGlassIcon className="h-5 w-5" />}
+            />
+            </div> */}
             <Button
               className="flex items-center gap-3 bg-[#203FC7] cursor-pointer h-10"
               size="sm"
-              onClick={() => navigate("/dashboard/add-room")}
+              //onClick={() => handleOpenAddFacilities()}
             >
-              {t("add_new_room")}
+              {t("add_new_ad")}
             </Button>
           </div>
         </div>
         {/*  */}
-        
+
         {loading ? (
           <div className="mt-3">
             <SkeletonOne />
@@ -174,8 +134,8 @@ const RoomsAdminPage = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {roomsList?.length > 0 ? (
-                    roomsList?.map((room, index) => (
+                  {currentItems?.length > 0 ? (
+                    currentItems?.map((room, index) => (
                       <tr key={index}>
                         {/* room num */}
                         <td className="p-4 border-b border-[#e0e0e0]">
@@ -185,7 +145,7 @@ const RoomsAdminPage = () => {
                               //color="blue-gray"
                               className="font-bold text-[#263238]"
                             >
-                              {room?.roomNumber}
+                              {room?.room?.roomNumber}
                             </Typography>
                           </div>
                         </td>
@@ -194,7 +154,7 @@ const RoomsAdminPage = () => {
                         <td className="p-4 border-b border-[#e0e0e0]">
                           <img
                             className="w-21 h-15 rounded-xl object-cover"
-                            src={room?.images[0] || Images.defaultImage}
+                            src={room?.room?.images[0] || Images.defaultImage}
                             alt="Room"
                             loading="lazy"
                           />
@@ -206,7 +166,7 @@ const RoomsAdminPage = () => {
                             variant="small"
                             className="font-medium text-[#263238]"
                           >
-                            {room?.price}$
+                            {room?.room?.price}$
                           </Typography>
                         </td>
 
@@ -216,7 +176,7 @@ const RoomsAdminPage = () => {
                             variant="small"
                             className="font-medium text-[#263238]"
                           >
-                            {room?.discount}%
+                            {room?.room?.discount}%
                           </Typography>
                         </td>
 
@@ -226,14 +186,24 @@ const RoomsAdminPage = () => {
                             variant="small"
                             className="font-medium text-[#263238]"
                           >
-                            {room?.capacity} ({t("person")})
+                            {room?.room?.capacity} ({t("person")})
+                          </Typography>
+                        </td>
+
+                        {/* room status */}
+                        <td className="p-4 border-b border-[#e0e0e0]">
+                          <Typography
+                            variant="small"
+                            className="font-medium text-[#263238]"
+                          >
+                            {room?.isActive}
                           </Typography>
                         </td>
 
                         {/* room facility */}
-                        <td className="p-4 border-b border-[#e0e0e0]">
+                        {/* <td className="p-4 border-b border-[#e0e0e0]">
                           <span className="flex gap-[6px] flex-wrap max-w-80">
-                            {room.facilities.map((facility, index) => (
+                            {room?.room?.facilities.map((facility, index) => (
                               <span
                                 className="bg-[#dedede] rounded-full px-3 py-1 text-xs"
                                 key={index}
@@ -242,7 +212,7 @@ const RoomsAdminPage = () => {
                               </span>
                             ))}
                           </span>
-                        </td>
+                        </td> */}
 
                         <td className="p-4 border-b border-[#e0e0e0]">
                           <Tooltip content="Edit User">
@@ -258,7 +228,7 @@ const RoomsAdminPage = () => {
                               <MenuList className="border border-[#eceff1]">
                                 <MenuItem
                                   className="flex gap-1"
-                                  onClick={() => handleOpenDetails(room?._id)}
+                                  //onClick={() => handleOpenDetails(room?._id)}
                                 >
                                   <EyeIcon className="size-4 text-[#8b8b8b]" />
                                   {t("view")}
@@ -278,7 +248,7 @@ const RoomsAdminPage = () => {
                                 <hr className="my-1 border-[#e0e0e0] hover:shadow-none outline-0" />
                                 <MenuItem
                                   className="flex gap-1"
-                                  onClick={() => handleOpenDelete(room?._id)}
+                                  //onClick={() => handleOpenDelete(room?._id)}
                                 >
                                   <TrashIcon className="size-4 text-[#8b8b8b]" />
                                   {t("delete")}
@@ -305,36 +275,17 @@ const RoomsAdminPage = () => {
 
             {/* pagination */}
             {totalPages > 1 && (
-              <>
-                <MainPagination
-                  setCurrentPage={setCurrentPage}
-                  currentPage={currentPage}
-                  totalPages={totalPages}
-                />
-              </>
+              <MainPagination
+                setCurrentPage={setCurrentPage}
+                currentPage={currentPage}
+                totalPages={totalPages}
+              />
             )}
           </>
         )}
       </div>
-      {/*  */}
-
-      {/* details modal */}
-      <DetailsModal
-        open={openDetails}
-        handleOpen={handleOpenDetails}
-        roomId={selectedRoom}
-      />
-
-      {/* delete modal */}
-      <DeleteModal
-        open={openDelete}
-        handleOpen={handleOpenDelete}
-        roomId={selectedRoom}
-        onSubmit={handleDeleteRoom}
-        confirmText={t("delete_room_confirm")}
-      />
     </div>
   );
 };
 
-export default RoomsAdminPage;
+export default AdsPage;
