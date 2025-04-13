@@ -209,7 +209,7 @@ const ExplorePage = () => {
                       />
                     </div>
                   ))
-                : "No data available"}
+                : <div>No data available</div>}
             </div>
 
             {/* pagination */}

@@ -56,6 +56,7 @@ const MainSidebar = ({ sideBarCollapsed, setSideBarCollapsed }) => {
                     <img src={Images.home_icon} className="w-5.5" alt="pic" />
                   }
                   className="text-white text-[15px]"
+                  onClick={() => navigate("/dashboard")}
                 />
               </div>
             </Tooltip>
@@ -63,6 +64,7 @@ const MainSidebar = ({ sideBarCollapsed, setSideBarCollapsed }) => {
             <MenuItem
               icon={<img src={Images.home_icon} className="w-5.5" alt="pic" />}
               className="text-white text-[15px]"
+              onClick={() => navigate("/dashboard")}
             >
               {t("home")}
             </MenuItem>
@@ -81,6 +83,7 @@ const MainSidebar = ({ sideBarCollapsed, setSideBarCollapsed }) => {
                     <img src={Images.catug_icon} className="w-5" alt="pic" />
                   }
                   className="text-white text-[15px]"
+                  onClick={() => navigate("/dashboard/admin-rooms")}
                 />
               </div>
             </Tooltip>
@@ -120,7 +123,7 @@ const MainSidebar = ({ sideBarCollapsed, setSideBarCollapsed }) => {
           {/* booking */}
           {sideBarCollapsed ? (
             <Tooltip
-              content={t("bookings_facilities")}
+              content={t("facilities")}
               className="bg-[#203FC7] font-light"
               placement={currentLang === "ar" ? "left" : "right"}
             >
@@ -130,6 +133,7 @@ const MainSidebar = ({ sideBarCollapsed, setSideBarCollapsed }) => {
                     <img src={Images.date_icon} className="w-5" alt="pic" />
                   }
                   className="text-white text-[15px]"
+                  onClick={() => navigate("/dashboard/facilities")}
                 />
               </div>
             </Tooltip>
@@ -137,8 +141,9 @@ const MainSidebar = ({ sideBarCollapsed, setSideBarCollapsed }) => {
             <MenuItem
               icon={<img src={Images.date_icon} className="w-5" alt="pic" />}
               className="text-white text-[15px]"
+              onClick={() => navigate("/dashboard/facilities")}
             >
-              {t("bookings_facilities")}
+              {t("facilities")}
             </MenuItem>
           )}
 

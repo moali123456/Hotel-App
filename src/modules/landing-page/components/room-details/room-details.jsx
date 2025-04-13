@@ -39,11 +39,11 @@ const RoomDetails = () => {
   //const imageList = [Images.room_pic_1, Images.room_pic_2, Images.room_pic_3];
 
   // get room details
-  const getRoom = async () => {
+  const getRoom = async (id) => {
     try {
       setLoading(true);
       const response = await axios.get(
-        ROOMS_URLS.getRoomDetails(`${id}`),
+        ROOMS_URLS.getRoomDetails(id),
         BASE_HEADERS
       );
       setImagesList(response?.data?.data?.room?.images || []);
@@ -104,7 +104,7 @@ const RoomDetails = () => {
   };
 
   useEffect(() => {
-    getRoom();
+    getRoom(id);
   }, [id]);
 
   return (

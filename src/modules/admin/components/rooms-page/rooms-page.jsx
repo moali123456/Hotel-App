@@ -1,95 +1,118 @@
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   Button,
   Typography,
-  Chip,
-  Avatar,
   IconButton,
   Tooltip,
   Input,
+  Menu,
+  MenuHandler,
+  MenuList,
+  MenuItem,
 } from "@material-tailwind/react";
-import { PencilIcon } from "@heroicons/react/24/solid";
-import { ArrowRightIcon, ArrowLeftIcon } from "@heroicons/react/24/outline";
+import { EllipsisVerticalIcon } from "@heroicons/react/24/solid";
+import { EyeIcon, TrashIcon, PencilIcon } from "@heroicons/react/24/outline";
+import { useNavigate } from "react-router-dom";
+import SkeletonOne from "../../../landing-page/shared/skeleton/skeleton-one";
+import { ROOMS_ADMIN_URLS } from "../../../../constants/ADMIN_END_POINTS";
+import axios from "axios";
+import Images from "../../../../assets/Images/Images";
+import MainPagination from "../../shared/main-pagination/main-pagination";
+import DetailsModal from "./details-modal";
+import DeleteModal from "../../shared/delete-modal/delete-modal";
+import { toast } from "react-toastify";
 import "./rooms-page.scss";
 
 const RoomsAdminPage = () => {
-  const { t } = useTranslation();
-  const TABLE_HEAD = ["Transaction", "Amount", "Date", "Status", "Account", ""];
+  const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
+  const [roomsList, setRoomsList] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [openDetails, setOpenDetails] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
+  const [selectedRoom, setSelectedRoom] = useState(null);
+  const [totalCount, setTotalCount] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
 
-  const TABLE_ROWS = [
-    {
-      img: "https://docs.material-tailwind.com/img/logos/logo-spotify.svg",
-      name: "Spotify",
-      amount: "$2,500",
-      date: "Wed 3:00pm",
-      status: "paid",
-      account: "visa",
-      accountNumber: "1234",
-      expiry: "06/2026",
-    },
-    {
-      img: "https://docs.material-tailwind.com/img/logos/logo-amazon.svg",
-      name: "Amazon",
-      amount: "$5,000",
-      date: "Wed 1:00pm",
-      status: "paid",
-      account: "master-card",
-      accountNumber: "1234",
-      expiry: "06/2026",
-    },
-    {
-      img: "https://docs.material-tailwind.com/img/logos/logo-pinterest.svg",
-      name: "Pinterest",
-      amount: "$3,400",
-      date: "Mon 7:40pm",
-      status: "pending",
-      account: "master-card",
-      accountNumber: "1234",
-      expiry: "06/2026",
-    },
-    {
-      img: "https://docs.material-tailwind.com/img/logos/logo-google.svg",
-      name: "Google",
-      amount: "$1,000",
-      date: "Wed 5:00pm",
-      status: "paid",
-      account: "visa",
-      accountNumber: "1234",
-      expiry: "06/2026",
-    },
-    {
-      img: "https://docs.material-tailwind.com/img/logos/logo-netflix.svg",
-      name: "netflix",
-      amount: "$14,000",
-      date: "Wed 3:30am",
-      status: "cancelled",
-      account: "visa",
-      accountNumber: "1234",
-      expiry: "06/2026",
-    },
+  const token = JSON.parse(localStorage?.getItem("infooooo"))?.token;
+  const totalPages = Math.ceil(totalCount / itemsPerPage);
+
+  const handleOpenDetails = (roomId = null) => {
+    setSelectedRoom(roomId);
+    setOpenDetails(!openDetails);
+  };
+
+  const handleOpenDelete = (roomId = null) => {
+    setSelectedRoom(roomId);
+    setOpenDelete(!openDelete);
+  };
+
+  // get all rooms
+  const getRoomsList = async (page) => {
+    try {
+      setLoading(true);
+      const response = await axios.get(
+        `${ROOMS_ADMIN_URLS.getAll}?page=${page}&size=${itemsPerPage}`,
+        {
+          headers: {
+            Authorization: `${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      setRoomsList(response.data?.data?.rooms || []);
+      setTotalCount(response.data?.data?.totalCount || 0);
+    } catch (error) {
+      console.error("Error fetching rooms:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // delete room
+  const handleDeleteRoom = async () => {
+    try {
+      const response = await axios.delete(
+        ROOMS_ADMIN_URLS.deleteRoom(selectedRoom),
+        {
+          headers: {
+            Authorization: `${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      toast.success(t("room_deleted_successfuly"));
+      // Reload rooms list after successful deletion
+      await getRoomsList(currentPage);
+      // Close the delete modal
+      setOpenDelete(false);
+      // Clear the selected room
+      setSelectedRoom(null);
+    } catch (error) {
+      toast.error(error.response?.data?.message);
+    }
+  };
+
+  useEffect(() => {
+    getRoomsList(currentPage);
+  }, [currentPage]);
+
+  const TABLE_HEAD = [
+    t("room_number"),
+    t("image"),
+    t("price"),
+    t("discount"),
+    t("capacity"),
+    t("facilities"),
+    "",
   ];
 
   return (
     <div id="admin_rooms">
-      {/* page title */}
-      {/* <div className="page-title flex items-center justify-between">
-        <div className="">
-          <h3 className="text-[#1F263E] font-semibold text-lg">
-            {t("rooms_page_title")}
-          </h3>
-          <p className="mb-0 text-[#8b8b8b] text-[15px]">
-            {t("rooms_page_sub_title")}
-          </p>
-        </div>
-
-        <Button className="bg-[#203FC7] cursor-pointer capitalize font-normal text-sm">
-          {t("add_new_room")}
-        </Button>
-      </div> */}
-      {/*  */}
-
-      {/*  */}
       <div className="">
+        {/* page title */}
         <div className="mb-4 flex flex-col justify-between gap-8 md:flex-row md:items-center">
           <div>
             <Typography
@@ -116,197 +139,200 @@ const RoomsAdminPage = () => {
             <Button
               className="flex items-center gap-3 bg-[#203FC7] cursor-pointer h-10"
               size="sm"
+              onClick={() => navigate("/dashboard/add-room")}
             >
-              {/* <ArrowDownTrayIcon strokeWidth={2} className="h-4 w-4" />{" "} */}
               {t("add_new_room")}
             </Button>
           </div>
         </div>
 
         {/*  */}
-        <div className="overflow-x-auto">
-        <table className="w-full min-w-max table-auto text-left">
-              <thead>
-                <tr>
-                  {TABLE_HEAD.map((head) => (
-                    <th
-                      key={head}
-                      className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4"
-                    >
-                      <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal leading-none opacity-70"
+        {loading ? (
+          <div className="mt-3">
+            <SkeletonOne />
+          </div>
+        ) : (
+          <>
+            <div className="overflow-x-auto table-bx">
+              <table className="w-full min-w-max table-auto text-left">
+                <thead>
+                  <tr>
+                    {TABLE_HEAD.map((head) => (
+                      <th
+                        key={head}
+                        className="border-y border-b-[#e0e0e0] border-t-[#e0e0e0] bg-[#E2E5EB] p-4"
                       >
-                        {head}
-                      </Typography>
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {TABLE_ROWS.map(
-                  (
-                    {
-                      img,
-                      name,
-                      amount,
-                      date,
-                      status,
-                      account,
-                      accountNumber,
-                      expiry,
-                    },
-                    index
-                  ) => {
-                    const isLast = index === TABLE_ROWS.length - 1;
-                    const classes = isLast
-                      ? "p-4"
-                      : "p-4 border-b border-blue-gray-50";
-
-                    return (
-                      <tr key={name}>
-                        <td className={classes}>
+                        <Typography
+                          variant="small"
+                          color="blue-gray"
+                          className="font-semibold leading-none opacity-70"
+                        >
+                          {head}
+                        </Typography>
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {roomsList?.length > 0 ? (
+                    roomsList?.map((room, index) => (
+                      <tr key={index}>
+                        {/* room num */}
+                        <td className="p-4 border-b border-[#e0e0e0]">
                           <div className="flex items-center gap-3">
-                            <Avatar
-                              src={img}
-                              alt={name}
-                              size="md"
-                              className="border border-blue-gray-50 bg-blue-gray-50/50 object-contain p-1"
-                            />
                             <Typography
                               variant="small"
-                              color="blue-gray"
-                              className="font-bold"
+                              //color="blue-gray"
+                              className="font-bold text-[#263238]"
                             >
-                              {name}
+                              {room?.roomNumber}
                             </Typography>
                           </div>
                         </td>
-                        <td className={classes}>
+
+                        {/* room image */}
+                        <td className="p-4 border-b border-[#e0e0e0]">
+                          <img
+                            className="w-21 h-15 rounded-xl object-cover"
+                            src={room?.images[0] || Images.defaultImage}
+                            alt="Room"
+                            loading="lazy"
+                          />
+                        </td>
+
+                        {/* room price */}
+                        <td className="p-4 border-b border-[#e0e0e0]">
                           <Typography
                             variant="small"
-                            color="blue-gray"
-                            className="font-normal"
+                            className="font-medium text-[#263238]"
                           >
-                            {amount}
+                            {room?.price}$
                           </Typography>
                         </td>
-                        <td className={classes}>
+
+                        {/* room discount */}
+                        <td className="p-4 border-b border-[#e0e0e0]">
                           <Typography
                             variant="small"
-                            color="blue-gray"
-                            className="font-normal"
+                            className="font-medium text-[#263238]"
                           >
-                            {date}
+                            {room?.discount}%
                           </Typography>
                         </td>
-                        <td className={classes}>
-                          <div className="w-max">
-                            <Chip
-                              size="sm"
-                              variant="ghost"
-                              value={status}
-                              color={
-                                status === "paid"
-                                  ? "green"
-                                  : status === "pending"
-                                  ? "amber"
-                                  : "red"
-                              }
-                            />
-                          </div>
+
+                        {/* room capacity */}
+                        <td className="p-4 border-b border-[#e0e0e0]">
+                          <Typography
+                            variant="small"
+                            className="font-medium text-[#263238]"
+                          >
+                            {room?.capacity} ({t("person")})
+                          </Typography>
                         </td>
-                        <td className={classes}>
-                          <div className="flex items-center gap-3">
-                            <div className="h-9 w-12 rounded-md border border-blue-gray-50 p-1">
-                              <Avatar
-                                src={
-                                  account === "visa"
-                                    ? "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/logos/visa.png"
-                                    : "https://demos.creative-tim.com/test/corporate-ui-dashboard/assets/img/logos/mastercard.png"
-                                }
-                                size="sm"
-                                alt={account}
-                                variant="square"
-                                className="h-full w-full object-contain p-1"
-                              />
-                            </div>
-                            <div className="flex flex-col">
-                              <Typography
-                                variant="small"
-                                color="blue-gray"
-                                className="font-normal capitalize"
+
+                        {/* room facility */}
+                        <td className="p-4 border-b border-[#e0e0e0]">
+                          <span className="flex gap-[6px] flex-wrap max-w-80">
+                            {room.facilities.map((facility, index) => (
+                              <span
+                                className="bg-[#dedede] rounded-full px-3 py-1 text-xs"
+                                key={index}
                               >
-                                {account.split("-").join(" ")} {accountNumber}
-                              </Typography>
-                              <Typography
-                                variant="small"
-                                color="blue-gray"
-                                className="font-normal opacity-70"
-                              >
-                                {expiry}
-                              </Typography>
-                            </div>
-                          </div>
+                                {facility.name}
+                              </span>
+                            ))}
+                          </span>
                         </td>
-                        <td className={classes}>
+
+                        <td className="p-4 border-b border-[#e0e0e0]">
                           <Tooltip content="Edit User">
-                            <IconButton variant="text">
-                              <PencilIcon className="h-4 w-4" />
-                            </IconButton>
+                            <Menu placement="bottom-end">
+                              <MenuHandler>
+                                <IconButton
+                                  variant="text"
+                                  className="cursor-pointer outline-0"
+                                >
+                                  <EllipsisVerticalIcon className="size-6" />
+                                </IconButton>
+                              </MenuHandler>
+                              <MenuList className="border border-[#eceff1]">
+                                <MenuItem
+                                  className="flex gap-1"
+                                  onClick={() => handleOpenDetails(room?._id)}
+                                >
+                                  <EyeIcon className="size-4 text-[#8b8b8b]" />
+                                  {t("view")}
+                                </MenuItem>
+                                <hr className="my-1 border-[#e0e0e0] hover:shadow-none outline-0" />
+                                <MenuItem
+                                  className="flex gap-1"
+                                  onClick={() =>
+                                    navigate(
+                                      `/dashboard/update-room/${room?._id}`
+                                    )
+                                  }
+                                >
+                                  <PencilIcon className="size-4 text-[#8b8b8b]" />
+                                  {t("edit")}
+                                </MenuItem>
+                                <hr className="my-1 border-[#e0e0e0] hover:shadow-none outline-0" />
+                                <MenuItem
+                                  className="flex gap-1"
+                                  onClick={() => handleOpenDelete(room?._id)}
+                                >
+                                  <TrashIcon className="size-4 text-[#8b8b8b]" />
+                                  {t("delete")}
+                                </MenuItem>
+                              </MenuList>
+                            </Menu>
                           </Tooltip>
                         </td>
                       </tr>
-                    );
-                  }
-                )}
-              </tbody>
-            </table>
-        </div>
-        {/* <Card className="h-full w-full ">
-          <CardHeader
-            floated={false}
-            shadow={false}
-            className="rounded-none"
-          ></CardHeader>
-          <CardBody className="px-0 overflow-x-auto">
-            
-          </CardBody>
-          <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
-            <Button variant="outlined" size="sm">
-              Previous
-            </Button>
-            <div className="flex items-center gap-2">
-              <IconButton variant="outlined" size="sm">
-                1
-              </IconButton>
-              <IconButton variant="text" size="sm">
-                2
-              </IconButton>
-              <IconButton variant="text" size="sm">
-                3
-              </IconButton>
-              <IconButton variant="text" size="sm">
-                ...
-              </IconButton>
-              <IconButton variant="text" size="sm">
-                8
-              </IconButton>
-              <IconButton variant="text" size="sm">
-                9
-              </IconButton>
-              <IconButton variant="text" size="sm">
-                10
-              </IconButton>
+                    ))
+                  ) : (
+                    <tr>
+                      <td
+                        colSpan={TABLE_HEAD.length}
+                        className="text-center p-4"
+                      >
+                        {t("no_data")}
+                      </td>
+                    </tr>
+                  )}
+                </tbody>
+              </table>
             </div>
-            <Button variant="outlined" size="sm">
-              Next
-            </Button>
-          </CardFooter>
-        </Card> */}
+
+            {/* pagination */}
+            {totalPages > 1 && (
+              <>
+                <MainPagination
+                  setCurrentPage={setCurrentPage}
+                  currentPage={currentPage}
+                  totalPages={totalPages}
+                />
+              </>
+            )}
+          </>
+        )}
       </div>
       {/*  */}
+
+      {/* details modal */}
+      <DetailsModal
+        open={openDetails}
+        handleOpen={handleOpenDetails}
+        roomId={selectedRoom}
+      />
+
+      {/* delete modal */}
+      <DeleteModal
+        open={openDelete}
+        handleOpen={handleOpenDelete}
+        roomId={selectedRoom}
+        onSubmit={handleDeleteRoom}
+        confirmText={t("delete_room_confirm")}
+      />
     </div>
   );
 };
