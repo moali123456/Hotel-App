@@ -103,9 +103,16 @@ input:-webkit-autofill {
   background-color: transparent !important;
   -webkit-box-shadow: 0 0 0 50px white inset;
 }
-.bg-opacity-60{
-  background-color: rgba(0,0,0,0.6);
+.bg-opacity-60 {
+  background-color: rgba(0, 0, 0, 0.6);
 }
 /* .bg-opacity-60.backdrop-blur-sm{
   filter: blur(4px);
 } */
+
+@media screen and (max-width: 768px) {
+  .container_bx {
+    padding-left: 5%;
+    padding-right: 5%;
+  }
+}

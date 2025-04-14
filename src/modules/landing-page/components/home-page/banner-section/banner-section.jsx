@@ -24,7 +24,7 @@ const BannerSection = () => {
       <div className="container_bx pt-12 md:pt-6 lg:pt-12">
         <div className="grid grid-cols-12 gap-4">
           <div className="col-span-12 md:col-span-7 lg:col-span-7">
-            <div className="max-w-[80%]">
+            <div className="max-w-full md:max-w-[80%] lg:max-w-[80%]">
               <h1 className="text-[#152C5B] text-5xl font-bold">
                 {t("home_page.banner_title_1")}
               </h1>

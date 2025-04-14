@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 import Images from "../../../../assets/Images/Images";
 import LanguageSwitch from "../../../shared/language-switch/language-switch";
 import "./auth-header.scss";
@@ -17,7 +18,9 @@ const AuthHeader = () => {
   return (
     <div className={`auth_header ${scroll ? "scrolled" : ""}`}>
       <div className="logo_bx">
-        <img src={Images.colorLogo} alt="pic" />
+        <Link to="/">
+          <img src={Images.colorLogo} alt="pic" />
+        </Link>
       </div>
 
       <div className="language_bx">

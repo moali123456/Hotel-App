@@ -58,7 +58,7 @@ function NavList() {
           </ListItem>
 
           <ListItem className="flex items-center gap-2 py-2 pr-4 text-[#152C5B] text-[16px]">
-            <div className="">          
+            <div className="">
               {/* <span>{favoritesData?.length}</span> */}
               <Badge content={favoritesData?.length}>
                 <Link to="/favorites" className="font-medium">
@@ -69,7 +69,18 @@ function NavList() {
           </ListItem>
         </>
       ) : (
-        ""
+        <>
+          <ListItem className="items-center gap-2 py-2 pr-4 text-[#152C5B] text-[16px] font-medium flex md:hidden lg:hidden">
+            <Link to="/auth/login" className="font-medium">
+              {t("login_now")}
+            </Link>
+          </ListItem>
+          <ListItem className="items-center gap-2 py-2 pr-4 text-[#152C5B] text-[16px] font-medium flex md:hidden lg:hidden">
+            <Link to="/auth/register" className="font-medium">
+              {t("register")}
+            </Link>
+          </ListItem>
+        </>
       )}
     </List>
   );
@@ -109,14 +120,13 @@ export function MenuBar() {
   // get favorites
   const getRoomsList = async () => {
     try {
-      const response = await axios.get(
-        `${ROOMS_FAVOURITES.getAllFav}`,
-        {
-          headers: {
-            Authorization: `${JSON.parse(localStorage?.getItem("infooooo"))?.token}`,
-          },
-        }
-      );
+      const response = await axios.get(`${ROOMS_FAVOURITES.getAllFav}`, {
+        headers: {
+          Authorization: `${
+            JSON.parse(localStorage?.getItem("infooooo"))?.token
+          }`,
+        },
+      });
 
       const rooms = response.data?.data?.favoriteRooms[0]?.rooms || [];
 
@@ -139,7 +149,7 @@ export function MenuBar() {
   // Re-run when favorites change
   useEffect(() => {
     console.log("Favorites updated:", favoritesData);
-  }, [favoritesData]); 
+  }, [favoritesData]);
 
   useEffect(() => {
     window.addEventListener(
@@ -172,7 +182,7 @@ export function MenuBar() {
             <IconButton
               variant="text"
               color="blue-gray"
-              className="lg:hidden bg-amber-500 cursor-pointer"
+              className="lg:hidden bg-[#3252df] text-white cursor-pointer"
               onClick={() => setOpenNav(!openNav)}
             >
               {openNav ? (
@@ -192,7 +202,7 @@ export function MenuBar() {
                 userName={userProfileData?.userName || ""}
               />
             ) : (
-              <div className="flex gap-2">
+              <div className="gap-2 hidden md:flex lg:flex">
                 <Link to="/auth/register">
                   <Button
                     variant="filled"

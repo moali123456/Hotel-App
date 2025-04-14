@@ -47,4 +47,23 @@
       height: 40px;
     }
   }
+  @media screen and (max-width: 768px) {
+    .prev-btn {
+      bottom: 250px;
+      inset-inline-start: calc(50% - 40px);
+      span {
+        width: 40px;
+        height: 40px;
+      }
+    }
+    .next-ptn {
+      bottom: 250px;
+      inset-inline-start: calc(50% + 20px);
+      transform: rotate(180deg);
+      span {
+        width: 40px;
+        height: 40px;
+      }
+    }
+  }
 }
