@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import i18n from "i18next";
 import { useTranslation } from "react-i18next";
 import { Tooltip } from "@material-tailwind/react";
@@ -13,14 +14,22 @@ const MainSidebar = ({ sideBarCollapsed, setSideBarCollapsed }) => {
   const navigate = useNavigate();
   const currentLang = i18n.language;
   const dispatch = useDispatch();
+  const [toggled, setToggled] = useState(false);
+  const [broken, setBroken] = useState(
+    window.matchMedia("(max-width: 800px)").matches
+  );
 
   return (
-    <div className="h-full fixed" id="side_bar">
+    <div
+      className={`h-full fixed ${sideBarCollapsed ? "closed" : "opened"}`}
+      id="side_bar"
+    >
       <Sidebar
+        //customBreakPoint="800px" onBreakPoint={setBroken}
         collapsed={sideBarCollapsed}
         transitionDuration={500}
-        className={`min-h-full ${
-          sideBarCollapsed ? "sidebar-collapsed" : "!w-60 !min-w-60"
+        className={`min-h-full main-sidebar ${
+          sideBarCollapsed ? "sidebar-collapsed" : "w-60 min-w-60"
         }`}
       >
         <Menu className="h-screen bg-[#203FC7]">
