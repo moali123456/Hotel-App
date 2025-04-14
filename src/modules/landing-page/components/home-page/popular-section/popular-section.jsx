@@ -75,22 +75,24 @@ const PopularSection = () => {
           <SkeletonOne />
         ) : (
           <>
-            <div className="grid grid-flow-col grid-rows-4 gap-4">
+            <div className="grid grid-flow-row md:grid-flow-col lg:grid-flow-col grid-rows-4 gap-4">
               {roomsList?.length > 0
                 ? roomsList?.map((room, index) => (
                     <div
                       key={index}
                       className={`${
                         index === 0
-                          ? "row-span-4 h-full"
-                          : "col-span-2 row-span-2"
+                          ? "col-span-2 row-span-2 md:row-span-4 lg:row-span-4 h-full"
+                          : "col-span-2 row-span-2 md:row-span-2 lg:row-span-2"
                       }`}
                     >
                       <div className="">
                         <ItemCard
                           cardImg={room?.images[0] || Images.room_default}
-                          imgClass={`${ 
-                            index === 0 ? "h-[436px]" : "h-[210px]"
+                          imgClass={`${
+                            index === 0
+                              ? "h-[210px] md:h-[436px] lg:h-[436px]"
+                              : "h-[210px]"
                           }`}
                           itemPrice={room?.price}
                           cardLabel={true}
