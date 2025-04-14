@@ -177,6 +177,13 @@
   "add_new_ad": "Add New Ad",
   "active": "Active",
   "not_active": "Not active",
+  "isactive_required": "Active status is required",
+  "select_room": "Select room",
+  "select_status": "Select room status...",
+  "ads_deleted_successfuly": "Ads deleted successfuly",
+  "update_ads": "Update ads",
+  "ads_update_successfully": "Ads updated successfully",
+  "delete_ads_confirm": "Are you sure you want to delete this Ads?",
 
   "home_page": {
     "banner_title_1": "Forget Busy Work,",

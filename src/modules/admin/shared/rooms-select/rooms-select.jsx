@@ -95,7 +95,7 @@ const RoomsSelect = ({ control, errors, t }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [totalCount, setTotalCount] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 60;
+  const itemsPerPage = 300;
   const totalPages = Math.ceil(totalCount / itemsPerPage);
   const token = JSON.parse(localStorage?.getItem("infooooo"))?.token;
 
@@ -130,7 +130,7 @@ const RoomsSelect = ({ control, errors, t }) => {
       <Controller
         name="room"
         control={control}
-        rules={{ required: t("facilities_required") }}
+        rules={{ required: t("room_num_required") }}
         render={({ field }) => {
           const selectedValue = options.find(
             (option) => option.value === field.value
@@ -148,7 +148,7 @@ const RoomsSelect = ({ control, errors, t }) => {
               classNamePrefix="select"
               isClearable
               isLoading={isLoading}
-              placeholder={t("select_facilities")}
+              placeholder={t("select_room")}
             />
           );
         }}

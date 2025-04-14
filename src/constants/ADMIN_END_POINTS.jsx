@@ -23,10 +23,10 @@ const BASE_ADMIN_ADS = `${BASE_URL}/admin/ads`;
 
 export const ADS_ADMIN_URLS = {
   getAllAds: `${BASE_ADMIN_ADS}`,
-//   getRoomDetails: (id) => `${BASE_ADMIN_ADS}/${id}`,
-//   addRoom: `${BASE_ADMIN_ADS}`,
-//   updateRoom: (id) => `${BASE_ADMIN_ADS}/${id}`,
-//   deleteRoom: (id) => `${BASE_ADMIN_ADS}/${id}`,
+  getAdsDetails: (id) => `${BASE_ADMIN_ADS}/${id}`,
+  addAds: `${BASE_ADMIN_ADS}`,
+  updateAds: (id) => `${BASE_ADMIN_ADS}/${id}`,
+  deleteAds: (id) => `${BASE_ADMIN_ADS}/${id}`,
 };
 
 // ROOMS FACILITIES ADMIN URL

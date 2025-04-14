@@ -2,6 +2,15 @@
   div.h-10 {
     height: auto !important;
   }
+  .status-select {
+    div.h-11 {
+      height: auto !important;
+    }
+    button{
+      height: 56px;
+      border-radius: 14px;
+    }
+  }
 
   input {
     height: 56px;
@@ -17,6 +26,9 @@
       font-family: myArFont;
     }
   }
+  select {
+    height: 56px;
+  }
 
   .rooms_select {
     input {
@@ -28,7 +40,6 @@
       border-radius: 14px;
       border-color: #f5f6f8;
       background-color: #f5f6f8;
-
     }
 
     .css-t3ipsp-control {
