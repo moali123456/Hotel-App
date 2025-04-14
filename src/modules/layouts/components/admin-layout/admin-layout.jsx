@@ -26,8 +26,8 @@ const AdminLayout = () => {
 
         {/* Content */}
         <div
-          className={`w-full p-5 overflow-hidden ${
-            sideBarCollapsed ? "ms-20" : "ms-60"
+          className={`w-full p-5 overflow-hidden main_content ${
+            sideBarCollapsed ? "ms-20 closed" : "ms-60 opened"
           } transition-all duration-500`}
         >
           {/* topbar */}
