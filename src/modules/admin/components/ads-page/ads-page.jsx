@@ -5,14 +5,13 @@ import {
   Typography,
   IconButton,
   Tooltip,
-  Input,
   Menu,
   MenuHandler,
   MenuList,
   MenuItem,
 } from "@material-tailwind/react";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/solid";
-import { EyeIcon, TrashIcon, PencilIcon } from "@heroicons/react/24/outline";
+import { TrashIcon, PencilIcon } from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router-dom";
 import SkeletonOne from "../../../landing-page/shared/skeleton/skeleton-one";
 import axios from "axios";
@@ -20,14 +19,20 @@ import { ADS_ADMIN_URLS } from "../../../../constants/ADMIN_END_POINTS";
 import Images from "../../../../assets/Images/Images";
 import MainPagination from "../../shared/main-pagination/main-pagination";
 import AddAdsModal from "./add-ads-modal";
+import UpdateAdsModal from "./update-ads-modal";
+import DeleteModal from "../../shared/delete-modal/delete-modal";
+import { toast } from "react-toastify";
 import "./ads-page.scss";
 
 const AdsPage = () => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [adsList, setAdsList] = useState([]);
   const [openAddAds, setOpenAddAds] = useState(false);
+  const [openUpdateAds, setOpenUpdateAds] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
+  const [selectedAds, setSelectedAds] = useState(null);
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(6);
@@ -37,6 +42,17 @@ const AdsPage = () => {
   // open add modal
   const handleOpenAddAds = () => {
     setOpenAddAds(!openAddAds);
+  };
+  // open update modal
+  const handleOpenUpdateAds = (adsId = null) => {
+    setSelectedAds(adsId);
+    setOpenUpdateAds(!selectedAds);
+    console.log(adsId);
+  };
+  // open delete modal
+  const handleOpenDelete = (adsId = null) => {
+    setSelectedAds(adsId);
+    setOpenDelete(!openDelete);
   };
 
   // get all facilities
@@ -55,6 +71,30 @@ const AdsPage = () => {
       console.error("Error fetching facilities:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  // delete room
+  const handleDeleteRoom = async () => {
+    try {
+      const response = await axios.delete(
+        ADS_ADMIN_URLS.deleteAds(selectedAds),
+        {
+          headers: {
+            Authorization: `${token}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      toast.success(t("ads_deleted_successfuly"));
+      // Reload rooms list after successful deletion
+      await getALLAds(currentPage);
+      // Close the delete modal
+      setOpenDelete(false);
+      // Clear the selected room
+      setSelectedAds(null);
+    } catch (error) {
+      toast.error(error.response?.data?.message || t("some_thing_wrong"));
     }
   };
 
@@ -230,7 +270,7 @@ const AdsPage = () => {
                                 <MenuItem
                                   className="flex gap-1"
                                   onClick={() =>
-                                    handleOpenUpdateFacilities(room?.room?._id)
+                                    handleOpenUpdateAds(room?._id)
                                   }
                                 >
                                   <PencilIcon className="size-4 text-[#8b8b8b]" />
@@ -239,7 +279,7 @@ const AdsPage = () => {
                                 <hr className="my-1 border-[#e0e0e0] hover:shadow-none outline-0" />
                                 <MenuItem
                                   className="flex gap-1"
-                                  //onClick={() => handleOpenDelete(room?._id)}
+                                  onClick={() => handleOpenDelete(room?._id)}
                                 >
                                   <TrashIcon className="size-4 text-[#8b8b8b]" />
                                   {t("delete")}
@@ -280,7 +320,24 @@ const AdsPage = () => {
       <AddAdsModal
         open={openAddAds}
         handleOpen={handleOpenAddAds}
-        //reloadFacilities={fetchFacilities}
+        reloadAds={getALLAds}
+      />
+
+      {/* update modal */}
+      <UpdateAdsModal
+        open={openUpdateAds}
+        handleOpen={handleOpenUpdateAds}
+        reloadAds={getALLAds}
+        adsId={selectedAds}
+      />
+
+      {/* delete modal */}
+      <DeleteModal
+        open={openDelete}
+        handleOpen={handleOpenDelete}
+        adsId={selectedAds}
+        onSubmit={handleDeleteRoom}
+        confirmText={t("delete_ads_confirm")}
       />
 
     </div>

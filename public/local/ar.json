@@ -176,6 +176,13 @@
   "add_new_ad": "اضافة اعلان",
   "active": "مفعل",
   "not_active": "غير مفعل",
+  "isactive_required": "حالة الغرفة مطلوبة",
+  "select_room": "اختر غرفة",
+  "select_status": "اختر حالة الغرفة",
+  "ads_deleted_successfuly": "تم إضافة الاعلان بنجاح",
+  "update_ads": "تحديث الاعلان",
+  "ads_update_successfully": "تم تحديث الاعلان بنجاح",
+  "delete_ads_confirm": "هل انت متاكد انك تريد حذف هذا الاعالان؟",
 
   "home_page": {
     "banner_title_1": "انسَ العمل المزدحم،",
